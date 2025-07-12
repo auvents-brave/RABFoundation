@@ -1,6 +1,6 @@
 //
-//  GPSMessage.swift
-//  RubriqueÀBrac
+//  Throttled.swift
+//  RABFoundation
 //
 //  Created by Stéphane on 28/06/2025.
 

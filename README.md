@@ -1,6 +1,6 @@
-# Rubrique à Brac // RAB
+# Rubrique à Brac // RABFoundation
 
-RubriqueBrac is a plain Swift library for dealing with different points I generally use in my own softwares.
+RABFoundation is a plain Swift library for dealing with different points I generally use in my own softwares.
 
 ## Prerequisites
 

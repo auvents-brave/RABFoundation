@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "RABNmea",
+    name: "RABFoundation",
     platforms: [
         .macOS(.v11),
         .macCatalyst(.v14),
@@ -14,18 +14,18 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "RABNmea",
-            targets: ["RABNmea"]
+            name: "RABFoundation",
+            targets: ["RABFoundation"]
         ),
     ],
     dependencies: [
     ],
     targets: [
         .target(
-            name: "RABNmea"),
+            name: "RABFoundation"),
         .testTarget(
-            name: "RABNmeaests",
-            dependencies: ["RABNmea"]
+            name: "RABFoundationTests",
+            dependencies: ["RABFoundation"]
         ),
     ],
     swiftLanguageModes: [ .v6 ],
