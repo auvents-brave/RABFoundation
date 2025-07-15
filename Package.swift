@@ -5,11 +5,11 @@ import PackageDescription
 let package = Package(
     name: "RABFoundation",
     platforms: [
-        .macOS(.v11),
-        .macCatalyst(.v14),
-        .iOS(.v14),
-        .tvOS(.v14),
-        .watchOS(.v5),
+        .macOS(.v10_15),
+        .macCatalyst(.v13),
+        .iOS(.v13),
+        .tvOS(.v13),
+        .watchOS(.v6),
         .visionOS(.v1),
     ],
     products: [
