@@ -27,7 +27,7 @@ import Foundation
 /// ```
 ///
 /// - Parameter Value: The type of value being wrapped.
-@propertyWrapper struct Throttled<Value> {
+@propertyWrapper public struct Throttled<Value> {
     /// The current underlying value, updated only if the throttle interval has passed.
     private var value: Value
     /// The date when the value was last successfully set.
@@ -40,14 +40,14 @@ import Foundation
     /// - Parameters:
     ///   - wrappedValue: The initial value to wrap.
     ///   - timeInterval: The minimum interval between updates (default is 1 second).
-    init(wrappedValue: Value, timeInterval: TimeInterval = 1) {
+    public init(wrappedValue: Value, timeInterval: TimeInterval = 1) {
         value = wrappedValue
         interval = timeInterval
         lastSet = Date()
     }
 
     /// Accesses the wrapped value. Assignments only succeed if the minimum interval has elapsed since the last update.
-    var wrappedValue: Value {
+    public var wrappedValue: Value {
         get { value }
         set {
             let now = Date()
