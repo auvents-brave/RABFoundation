@@ -12,7 +12,6 @@ import Foundation
 
 #if os(Windows)
     #if NOTYETBUILDABLE
-    #else
         import WinSDK
 
         /// Additionally writes any data written to standard output into the given
