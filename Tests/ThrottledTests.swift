@@ -1,4 +1,4 @@
-@testable import RABFoundationX
+@testable import RABFoundation
 import Testing
 
 @Test func DidNotUpdated() async throws {
