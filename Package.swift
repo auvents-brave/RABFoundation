@@ -25,11 +25,11 @@ let package = Package(
     targets: [
         .target(
             name: "RABFoundation",
-            dependencies: ["Logging"],
+        //    dependencies: ["Logging"],
         ),
         .testTarget(
             name: "RABFoundationTests",
-            dependencies: ["RABFoundation", "SwiftLogTesting"],
+            dependencies: ["RABFoundation"],    // , "SwiftLogTesting"
         ),
     ],
     swiftLanguageModes: [ .v6 ],
