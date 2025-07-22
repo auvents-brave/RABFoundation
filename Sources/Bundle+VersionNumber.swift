@@ -8,6 +8,7 @@
 /// ```swift
 /// let v = Bundle.main.releaseVersionNumber! + " (" + Bundle.main.buildVersionNumber! + ")"
 /// ```
+///
 
 import Foundation
 

@@ -1,4 +1,4 @@
-@testable import RABFoundation
+@testable import RABFoundationX
 import Testing
 
 @Test func DidNotUpdated() async throws {
@@ -12,3 +12,29 @@ import Testing
     v = "World!"
     #expect(v == "World!")
 }
+
+
+#if canImport(Logging)
+import Logging
+import SwiftLogTesting
+
+let label = "com.example.YourApp"
+let logger = Logger(label: label)
+
+
+@Test func Logger() async throws {
+    /// logger.info("message")
+    ///
+    ///
+    ///
+
+    TestLogMessages.bootstrap()
+    let container = TestLogMessages.container(forLabel: label)
+    container.reset()
+
+    #expect(container.messages.count == 1)
+
+    container.print()
+}
+#endif
+
