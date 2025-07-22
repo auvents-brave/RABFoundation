@@ -19,13 +19,22 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
+        .package(url: "https://github.com/neallester/swift-log-testing", from: "0.0.0"),
     ],
     targets: [
         .target(
-            name: "RABFoundation"),
+            name: "RABFoundation",
+            dependencies: [
+                .product(name: "Logging", package: "swift-log"),
+                ]
+        ),
         .testTarget(
             name: "RABFoundationTests",
-            dependencies: ["RABFoundation"]
+            dependencies: [
+                "RABFoundation",
+                .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+                ]
         ),
     ],
     swiftLanguageModes: [ .v6 ],
