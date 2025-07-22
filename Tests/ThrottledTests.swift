@@ -14,13 +14,12 @@ import Testing
 }
 
 
-#if canImport(Logging)
+
 import Logging
 import SwiftLogTesting
 
 let label = "com.example.YourApp"
 let logger = Logger(label: label)
-
 
 @Test func Logger() async throws {
     /// logger.info("message")
@@ -31,10 +30,11 @@ let logger = Logger(label: label)
     TestLogMessages.bootstrap()
     let container = TestLogMessages.container(forLabel: label)
     container.reset()
+    container.print()
+    #expect(container.messages.isEmpty)
+
+    logger.info("message")
+    container.print()   
 
     #expect(container.messages.count == 1)
-
-    container.print()
 }
-#endif
-

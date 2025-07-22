@@ -11,7 +11,7 @@
 import Foundation
 
 #if os(Windows)
-    #if NOTYETBUILDABLE
+    #if true
     #else
         import WinSDK
 
