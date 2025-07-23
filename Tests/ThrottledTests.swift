@@ -22,11 +22,6 @@ let label = "com.example.YourApp"
 let logger = Logger(label: label)
 
 @Test func Logger() async throws {
-    /// logger.info("message")
-    ///
-    ///
-    ///
-
     TestLogMessages.bootstrap()
     let container = TestLogMessages.container(forLabel: label)
     container.reset()
