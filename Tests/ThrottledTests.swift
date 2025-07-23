@@ -13,15 +13,13 @@ import Testing
     #expect(v == "World!")
 }
 
-
-
 import Logging
 import SwiftLogTesting
 
-let label = "com.example.YourApp"
+let label = "tst"
 let logger = Logger(label: label)
 
-@Test func Logger() async throws {
+@Test func TestingLogger() async throws {
     /// logger.info("message")
     ///
     ///
@@ -34,7 +32,19 @@ let logger = Logger(label: label)
     #expect(container.messages.isEmpty)
 
     logger.info("message")
-    container.print()   
+    container.print()
 
     #expect(container.messages.count == 1)
+}
+
+@Test func SimmpleLogger() async throws {
+    logger.info("info")
+    logger.critical("critical")
+    logger.debug("debug")
+    logger.warning("warning")
+    logger.error("error")
+    logger.notice("notice")
+    logger.trace("trace")
+
+    logger.log(level: .warning, "warning")
 }
