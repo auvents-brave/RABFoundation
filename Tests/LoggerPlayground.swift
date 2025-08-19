@@ -4,26 +4,24 @@ import SwiftLogTesting
 import Testing
 
 @Suite
-struct LogTesters {
-    @Test func TestingLogger() async throws {
+struct LoggerPlayground {
+    @Test("Playing with swift-log-testing") func Log1() async throws {
         TestLogMessages.bootstrap()
-        let container = TestLogMessages.container(forLabel: "TestingLogger")
-        container.reset()
-        #expect(container.messages.isEmpty)
-
-        let logger = Logger(label: "TestingLogger")
+        let container = TestLogMessages.container(forLabel: "Log1")
+        let logger = Logger(label: "Log1")
 
         logger.info("message")
         #expect(container.messages.count == 1)
-        #expect(container.messages[0].toString() == "info message|LogTests.swift|TestingLogger()")
-    }
+        #expect(container.messages[0].toString() == "info message|LoggerPlayground.swift|Log1()")
 
-    @Test func SimpleLogger() async throws {
-        TestLogMessages.bootstrap()
-        let container = TestLogMessages.container(forLabel: "SimpleLogger")
         container.reset()
         #expect(container.messages.isEmpty)
-        let logger = Logger(label: "SimpleLogger")
+    }
+
+    @Test("Playing with levels") func Log2() async throws {
+        TestLogMessages.bootstrap()
+        let container = TestLogMessages.container(forLabel: "Log2")
+        let logger = Logger(label: "Log2")
 
         // logLevel is .info by default
         logger.trace("trace")
@@ -38,8 +36,8 @@ struct LogTesters {
         #expect(container.messages.count == 5)
     }
 
-    @Test func OneMoreLogger() async throws {
-        var logger = Logger(label: "OneMoreLogger")
+    @Test("Playing with metadatas") func Log3() async throws {
+        var logger = Logger(label: "Log3")
         logger.logLevel = .trace
 
         logger.trace("Test started")

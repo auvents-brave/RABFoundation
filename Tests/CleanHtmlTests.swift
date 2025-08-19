@@ -1,7 +1,7 @@
 @testable import RabFoundation
 import Testing
 
-@Test("Misc - Strip HTML tags, decode HTML entities", arguments: [
+@Test("Strip HTML tags, decode HTML entities", arguments: [
     ("I told my computer I needed a break, and now it won’t stop sending me KitKat ads.", false, ""),
     ("Temperature: 37&deg;C &plusmn;0.5&deg;", true, "Temperature: 37°C ±0.5°"),
     ("&ldquo;The only way to do great work is to love what you do.&rdquo; — Steve Jobs", true, "“The only way to do great work is to love what you do.” — Steve Jobs"),

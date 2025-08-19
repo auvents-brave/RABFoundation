@@ -1,9 +1,5 @@
 import Foundation
 
-func isHTML(_ text: String) -> Bool {
-    return text != cleanHTML(from: text)
-}
-
 /// Removes all known HTML tags and decodes HTML entities.
 public func cleanHTML(from text: String) -> String {
     // Exhaustive list of known HTML tags (can be expanded as needed)
@@ -34,6 +30,10 @@ public func cleanHTML(from text: String) -> String {
 
     // Decode expanded set of HTML entities
     return decodeHTMLEntities(in: tagStripped)
+}
+
+internal func isHTML(_ text: String) -> Bool {
+    return text != cleanHTML(from: text)
 }
 
 /// Decodes an expanded set of HTML entities (&amp;, &lt;, &gt;, &quot;, &apos;, &nbsp;, &copy;, &reg;, &euro;, etc.).

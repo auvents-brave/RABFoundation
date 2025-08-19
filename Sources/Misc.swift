@@ -1,7 +1,11 @@
-//
-//  Untitled.swift
-//  rab-foundation
-//
-//  Created by Stéphane on 19/08/2025.
-//
+import Foundation
 
+public let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+
+public let isRunningInSimulator: Bool = {
+    #if targetEnvironment(simulator)
+        return true
+    #else
+        return false
+    #endif
+}()
