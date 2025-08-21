@@ -1,13 +1,3 @@
-
-/// Example usage:
-/// ```swift
-/// var output: any TextOutputStream = ""
-/// await InterceptingStdOut(to: &output) {
-///       FunctionUsingPrintToTraceThings()
-/// }
-/// #expect((output as! String).contains("wWhatever you expect to read in stdoutput"))
-/// ```
-
 import Foundation
 
 #if !os(Windows)
@@ -19,6 +9,15 @@ import Foundation
     ///   - encoding: The encoding to use when converting standard output into text.
     ///   - body: A closure that is executed immediately.
     /// - Returns: The return value, if any, of the `body` closure.
+    ///
+    /// Example usage:
+    /// ```swift
+    /// var output: any TextOutputStream = ""
+    /// await InterceptingStdOut(to: &output) {
+    ///       FunctionUsingPrintToTraceThings()
+    /// }
+    /// #expect((output as! String).contains("wWhatever you expect to read in stdoutput"))
+    /// ```
     public func InterceptingStdOut<T>(to output: inout TextOutputStream,
                                       encoding: String.Encoding = .utf8,
                                       body: () -> T) async -> T {

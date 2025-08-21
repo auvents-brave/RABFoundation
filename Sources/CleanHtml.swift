@@ -1,7 +1,23 @@
 import Foundation
 
-/// Removes all known HTML tags and decodes HTML entities.
-public func cleanHTML(from text: String) -> String {
+/**
+ Removes all known HTML tags from a string and decodes common HTML entities to their Unicode equivalents.
+
+ This function is intended to sanitize and clean up raw HTML content by:
+  - Removing an extensive list of known HTML tags (including inline, block, form, and media tags),
+  - Decoding a wide range of HTML entities (such as &amp;, &lt;, &gt;, &copy;, &euro;, and many more) into displayable characters.
+
+ - Parameter text: The input string containing HTML content to be sanitized. This can be either a raw HTML source or a text fragment with embedded HTML.
+ - Returns: A plain, human-readable string with all recognized HTML tags removed and all supported HTML entities decoded. If the input contains only safe, non-HTML content, the original string is returned.
+
+ ## Example
+ ```swift
+    let html = "<p>Copyright &copy; 2025</p>"
+    let plain = CleanHTML(from: html)
+    // plain == "Copyright © 2025"
+ ```
+ */
+public func CleanHTML(from text: String) -> String {
     // Exhaustive list of known HTML tags (can be expanded as needed)
     let htmlTags = [
         // Core and block tags
@@ -33,7 +49,7 @@ public func cleanHTML(from text: String) -> String {
 }
 
 internal func isHTML(_ text: String) -> Bool {
-    return text != cleanHTML(from: text)
+    return text != CleanHTML(from: text)
 }
 
 /// Decodes an expanded set of HTML entities (&amp;, &lt;, &gt;, &quot;, &apos;, &nbsp;, &copy;, &reg;, &euro;, etc.).
@@ -41,13 +57,13 @@ private func decodeHTMLEntities(in text: String) -> String {
     var result = text
     let entities: [String: String] = [
         // Basic entities
-        "&amp;" : "&", "&lt;" : "<", "&gt;" : ">", "&quot;": "\"", "&apos;": "'", "&nbsp;": " ",
+        "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": "\"", "&apos;": "'", "&nbsp;": " ",
         // Currency
-        "&euro;" : "€", "&yen;" : "¥", "&pound;": "£", "&cent;" : "¢",
+        "&euro;": "€", "&yen;": "¥", "&pound;": "£", "&cent;": "¢",
         // Quotes
         "&ldquo;": "“", "&rdquo;": "”", "&lsquo;": "‘", "&rsquo;": "’", "&laquo;": "«", "&raquo;": "»",
         // Math/symbols
-        "&deg;" : "°", "&plusmn;" : "±", "&copy;" : "©", "&reg;" : "®",
+        "&deg;": "°", "&plusmn;": "±", "&copy;": "©", "&reg;": "®",
         // Latin-1 Supplement (European letters)
         "&Agrave;": "À", "&Aacute;": "Á", "&Acirc;": "Â", "&Atilde;": "Ã", "&Auml;": "Ä", "&Aring;": "Å",
         "&AElig;": "Æ", "&Ccedil;": "Ç", "&Egrave;": "È", "&Eacute;": "É", "&Ecirc;": "Ê", "&Euml;": "Ë",

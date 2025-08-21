@@ -1,17 +1,17 @@
-/// Bundle+VersionNumber.swift
-///
-/// Provides convenient accessors for version numbers in an application's Info.plist via Bundle extensions.
-///
-/// This extension adds computed properties to retrieve the app's release and build version numbers.
-///
-/// Example usage:
-/// ```swift
-/// let v = Bundle.main.releaseVersion! + " (" + Bundle.main.buildNumber! + ")"
-/// ```
-
 import Foundation
 
-/// Extension to Bundle to access versioning information from the app's Info.plist.
+/**
+  Extension to Bundle to access versioning information from the app's Info.plist.
+
+  Provides convenient accessors for version numbers in an application's Info.plist via Bundle extensions.
+  This extension adds computed properties to retrieve the app's release and build version numbers.
+  ## Usage
+ ```swift
+    let version = Bundle.main.displayedVersion
+ ```
+
+  > Tip: To show the version string on the application's Settings pane, see <doc:DisplayAppVersion>.
+   */
 extension Bundle {
     /// The release version number of the app (from CFBundleShortVersionString in Info.plist).
     /// Returns nil if the value is not present.
@@ -48,5 +48,3 @@ internal struct Versioning {
         return "\(release) (\(build))"
     }
 }
-
-
