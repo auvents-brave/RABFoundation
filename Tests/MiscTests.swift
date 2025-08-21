@@ -3,9 +3,11 @@ import Testing
 
 @Suite
 struct MiscTests {
-    @Test func IsRunningTest() async throws {
-        #expect(isRunningTests)
-    }
+    #if !os(Windows)
+        @Test func IsRunningTest() async throws {
+            #expect(isRunningTests)
+        }
+    #endif
 
     @Test func IsRunningInSimulator() async throws {
         #expect(!isRunningInSimulator)

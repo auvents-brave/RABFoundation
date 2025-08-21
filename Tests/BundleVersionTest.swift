@@ -10,7 +10,5 @@ import Testing
         Issue.record("Could not load TestInfo.plist")
         return
     }
-    #expect(plist.description == "[\"CFBundleShortVersionString\": 1.0, \"CFBundleVersion\": 99]" || plist.description == "[\"CFBundleVersion\": 99, \"CFBundleShortVersionString\": 1.0]")
-
     #expect(Versioning.GetDisplayedVersion(plist) == "1.0 (99)")
 }

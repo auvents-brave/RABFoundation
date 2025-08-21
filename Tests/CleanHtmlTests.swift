@@ -14,6 +14,6 @@ import Testing
 func cleanHTML(_ value: (String, Bool, String)) {
     #expect(isHTML(value.0) == value.1)
     if value.1 {
-        #expect(cleanHTML(from: value.0) == value.2)
+        #expect(CleanHTML(from: value.0) == value.2)
     }
 }

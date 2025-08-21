@@ -3,8 +3,7 @@ import Logging
 import SwiftLogTesting
 import Testing
 
-@Suite
-struct LoggerPlayground {
+@Suite struct LoggerPlayground {
     @Test("Playing with swift-log-testing") func Log1() async throws {
         TestLogMessages.bootstrap()
         let container = TestLogMessages.container(forLabel: "Log1")
