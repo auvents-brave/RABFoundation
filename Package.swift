@@ -11,7 +11,7 @@ var prods: [Product] = [
 ]
 
 #if (os(Linux) || os(Android))
-prods.append(.library(name: "swift-doc", targets: []))
+prods.append(.library(name: "swift-doc", targets: ["RabFoundation"]))
 #endif
 
 let package = Package(
@@ -25,11 +25,7 @@ let package = Package(
         .visionOS(.v1),
     ],
 
-    /*
-     products: [
-         .library( name: "RabFoundation", targets: ["RabFoundation"],),
-     ],
-     */
+    // products: [.library( name: "RabFoundation", targets: ["RabFoundation"],),],
     products: prods,
 
     dependencies: [
