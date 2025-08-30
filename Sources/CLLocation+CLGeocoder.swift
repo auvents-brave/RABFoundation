@@ -1,3 +1,4 @@
+#if canImport(MapKit)
 import Foundation
 import MapKit
 
@@ -23,3 +24,4 @@ extension CLLocation {
         }
     }
 }
+#endif

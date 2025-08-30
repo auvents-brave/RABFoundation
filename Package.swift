@@ -6,11 +6,11 @@ import Foundation
 var prods: [Product] = [
     .library(
         name: "RABFoundation",
-        targets: ["RABFoundation"]
+        targets: ["RabFoundation"]
     )
 ]
 
-#if (os(Linux) || os(Android) || os(Windows))
+#if (os(Linux) || os(Android))
 prods.append(.library(name: "swift-doc", targets: []))
 #endif
 
