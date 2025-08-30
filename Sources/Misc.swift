@@ -19,16 +19,3 @@ public let isRunningTests: Bool = {
         return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     #endif
 }()
-
-/**
- Indicates whether the current process is running inside a simulator environment.
-
- Useful for distinguishing between simulator and real device at runtime, for conditional code paths or debugging.
- */
-public let isRunningInSimulator: Bool = {
-    #if targetEnvironment(simulator)
-        return true
-    #else
-        return false
-    #endif
-}()

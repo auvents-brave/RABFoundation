@@ -8,8 +8,4 @@ struct MiscTests {
             #expect(isRunningTests)
         }
     #endif
-
-    @Test func IsRunningInSimulator() async throws {
-        #expect(!isRunningInSimulator)
-    }
 }

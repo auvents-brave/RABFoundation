@@ -1,65 +1,67 @@
-import Foundation
-@testable import RabFoundation
-import Testing
+#if !os(Windows)
+    import Foundation
+    @testable import RabFoundation
+    import Testing
 
-@Suite struct UserDefaultsCloudSyncTests {
-    @Test(arguments: [nil, "shared"])
-    func SyncToCloud(_ value: String?) {
-        let mockDefaults = UserDefaults(suiteName: "TestDefaults")!
-        mockDefaults.set("me", forKey: "shared_username")
-        mockDefaults.set("P@ssword", forKey: "password")
-        mockDefaults.set(true, forKey: "shared_enabled")
+    @Suite struct UserDefaultsCloudSyncTests {
+        @Test(arguments: [nil, "shared"])
+        func SyncToCloud(_ value: String?) {
+            let mockDefaults = UserDefaults(suiteName: "TestDefaults")!
+            mockDefaults.set("me", forKey: "shared_username")
+            mockDefaults.set("P@ssword", forKey: "password")
+            mockDefaults.set(true, forKey: "shared_enabled")
 
-        let mockStore = MockUbiquitousStore()
+            let mockStore = MockUbiquitousStore()
 
-        let syncer = UserDefaultsCloudSync(
-            prefix: value,
-            defaults: mockDefaults,
-            ubiquitousStore: mockStore
-        )
-        syncer.SyncToCloud()
+            let syncer = UserDefaultsCloudSync(
+                prefix: value,
+                defaults: mockDefaults,
+                ubiquitousStore: mockStore
+            )
+            syncer.SyncToCloud()
 
-        print("⚠️ The 'com.apple.developer.ubiquity-kvstore-identifier' entitlement can't be setup in a library, only in an app.")
-        // #expect(mockStore.dictionaryRepresentation.count == (value == nil ? 3 : 2))
+            print("⚠️ The 'com.apple.developer.ubiquity-kvstore-identifier' entitlement can't be setup in a library, only in an app.")
+            // #expect(mockStore.dictionaryRepresentation.count == (value == nil ? 3 : 2))
+        }
+
+        @Test
+        func iCloudDidChange() async throws {
+            let mockStore = MockUbiquitousStore()
+            mockStore.set("P@ssword", forKey: "password")
+
+            let notification = Notification(
+                name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+                object: mockStore,
+                userInfo: nil
+            )
+
+            let mockDefaults = UserDefaults(suiteName: "TestDefaults")!
+
+            let syncer = UserDefaultsCloudSync(
+                prefix: nil,
+                defaults: mockDefaults,
+                ubiquitousStore: mockStore
+            )
+
+            syncer.iCloudDidChange(notification)
+
+            #expect(mockDefaults.string(forKey: "password") == "P@ssword")
+        }
     }
 
-    @Test
-    func iCloudDidChange() async throws {
-        let mockStore = MockUbiquitousStore()
-        mockStore.set("P@ssword", forKey: "password")
+    private class MockUbiquitousStore: NSUbiquitousKeyValueStore {
+        var values = [String: Any]()
 
-        let notification = Notification(
-            name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-            object: mockStore,
-            userInfo: nil
-        )
+        override func set(_ value: Any?, forKey key: String) {
+            values[key] = value
+        }
 
-        let mockDefaults = UserDefaults(suiteName: "TestDefaults")!
+        override func object(forKey key: String) -> Any? {
+            return values[key]
+        }
 
-        let syncer = UserDefaultsCloudSync(
-            prefix: nil,
-            defaults: mockDefaults,
-            ubiquitousStore: mockStore
-        )
-
-        syncer.iCloudDidChange(notification)
-
-        #expect(mockDefaults.string(forKey: "password") == "P@ssword")
+        override func synchronize() -> Bool {
+            return true
+        }
     }
-}
-
-private class MockUbiquitousStore: NSUbiquitousKeyValueStore {
-    var values = [String: Any]()
-
-    override func set(_ value: Any?, forKey key: String) {
-        values[key] = value
-    }
-
-    override func object(forKey key: String) -> Any? {
-        return values[key]
-    }
-
-    override func synchronize() -> Bool {
-        return true
-    }
-}
+#endif

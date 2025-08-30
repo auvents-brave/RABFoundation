@@ -1,3 +1,4 @@
+#if !os(Windows)
 import Foundation
 
 /// Synchronizes UserDefaults with iCloud's NSUbiquitousKeyValueStore, optionally filtering keys by prefix.
@@ -71,3 +72,5 @@ public class UserDefaultsCloudSync {
         return (prefix != nil) ? key.hasPrefix(prefix!) : true
     }
 }
+#endif
+
