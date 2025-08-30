@@ -1,4 +1,4 @@
-#if !os(Windows)
+#if !(os(Windows) || os(Linux) || os(Android))
     import Foundation
     @testable import RabFoundation
     import Testing

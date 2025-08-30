@@ -1,7 +1,9 @@
 FROM swift:latest
 
-RUN git clone https://auvents-brave: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@github.com/auvents-brave/RABFoundation
+WORKDIR /app
 
-RUN swift test
+COPY . .
 
-CMD ["/bin/bash"]
+RUN swift build --configuration release
+
+RUN swift test --parallel --skip-build
