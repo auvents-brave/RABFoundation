@@ -4,6 +4,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN swift build --configuration release
+# Install swift-doc
+# RUN git clone https://github.com/SwiftDocOrg/swift-doc.git && \
+#     cd swift-doc && \
+#     swift build -c release && \
+#     mv .build/release/swift-doc /usr/local/bin/swift-doc && \
+#     cd .. && \
+#     rm -rf swift-doc
 
-RUN swift test --parallel --skip-build
+RUN swift test --enable-swift-testing --parallel
+

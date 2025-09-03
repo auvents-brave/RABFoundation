@@ -3,6 +3,11 @@ import Foundation
 import Testing
 
 @Test func BundleVersionTest() async throws {
+
+    // Missing or bad CFBundle info in our app's Info.plist.
+    #expect(Versioning.GetDisplayedVersion(nil) == "Unknown version")
+
+    // Good Info.plist
     let bundle = Bundle.module
     guard let url = bundle.url(forResource: "TestInfo", withExtension: "plist"),
           let data = try? Data(contentsOf: url),
@@ -11,4 +16,9 @@ import Testing
         return
     }
     #expect(Versioning.GetDisplayedVersion(plist) == "1.0 (99)")
+
+    // Call our Bundle extensions to get correct code coverage
+    let _ = Bundle.module.releaseVersion
+    let _ = Bundle.module.buildNumber
+    let _ = Bundle.module.displayedVersion
 }

@@ -1,12 +1,10 @@
 #if canImport(MapKit)
     import MapKit
-#endif
 
-#if canImport(GeoToolbox)
-    import GeoToolbox
-#endif
+    #if canImport(GeoToolbox)
+        import GeoToolbox
+    #endif
 
-#if canImport(MapKit)
     @testable import RabFoundation
     import Testing
 
@@ -21,21 +19,23 @@
         UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
         UserDefaults.standard.synchronize()
 
-        let placemark: CLPlacemark? = await value.1.reverseLocation()
         let expectedName = value.0.split(separator: ",").first?.trimmingCharacters(in: .whitespaces) ?? value.0
-        #expect(placemark?.name == expectedName || placemark?.ocean == expectedName)
+
+        let placemark: CLPlacemark? = await value.1.reverseLocation()
+        #expect(placemark?.name == expectedName)
 
         let description: String = await value.1.reverseLocation()
-        #expect(description == value.0)
+        #expect(description == expectedName)
     }
 
     @Test("new PlaceDescriptor test", arguments: [
-        (CLLocation(latitude: 41.470, longitude: 9.268)),
-        (CLLocation(latitude: 43.736, longitude: 7.427)),
-        (CLLocation(latitude: 41.192, longitude: 9.407)),
-        (CLLocation(latitude: 37.335, longitude: -122.009)),
-        (CLLocation(latitude: -33.857, longitude: 151.215)),
+        CLLocation(latitude: 41.470, longitude: 9.268),
+        CLLocation(latitude: 43.736, longitude: 7.427),
+        CLLocation(latitude: 41.192, longitude: 9.407),
+        CLLocation(latitude: 37.335, longitude: -122.009),
+        CLLocation(latitude: -33.857, longitude: 151.215),
     ])
+
     @available(macOS 26.0, iOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *)
     func dummy(_ value: CLLocation) async throws {
         UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
@@ -46,5 +46,4 @@
 
         // Always returning Unknown Location. Probably due to a mandatory entitlement, I suppose.
     }
-
 #endif

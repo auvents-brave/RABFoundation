@@ -14,20 +14,15 @@ extension Date {
         // .withFractionalSeconds expects fractional seconds onbly and will fail if not
         // Given 45.321 seconds, the nano component for the returned Date will be 320999145, not 321
         // → May it be usefull to round it?
-        let date: Date?
+        let formatter = ISO8601DateFormatter()
         if fromISO.contains(".") {
-            let fractional = ISO8601DateFormatter()
-            fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-            date = fractional.date(from: fromISO)
-        } else {
-            date = ISO8601DateFormatter().date(from: fromISO)
+            formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         }
-
-        guard let ret = date else {
+        guard let date = formatter.date(from: fromISO) else {
             Logger(label: "").error("Something went wrong", metadata: ["fromISO": "\(fromISO)"])
             return
         }
-        self = ret
+        self = date
     }
 
     func Display(display: DisplayAs, formatter: DateFormatter) -> String {

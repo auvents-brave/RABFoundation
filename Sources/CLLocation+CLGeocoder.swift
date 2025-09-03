@@ -1,27 +1,28 @@
 #if canImport(MapKit)
-import Foundation
-import MapKit
+    import Foundation
+    import Logging
+    import MapKit
 
-extension CLLocation {
-    func reverseLocation() async -> String {
-        guard let mark = await reverseLocation() else {
-            return ""
+    extension CLLocation {
+        func reverseLocation() async -> String {
+            guard let mark = await reverseLocation() else {
+                return ""
+            }
+            return mark.name ?? ""
         }
-        return mark.name ?? ""
-    }
 
-    func reverseLocation() async -> CLPlacemark? {
-        return await withCheckedContinuation { continuation in
-            CLGeocoder().reverseGeocodeLocation(self) { placemarks, error in
-                guard error == nil else {
-                    Swift.print("Oh my god what a horror:" + error!.localizedDescription)
-                    continuation.resume(returning: nil)
-                    return
+        func reverseLocation() async -> CLPlacemark? {
+            return await withCheckedContinuation { continuation in
+                CLGeocoder().reverseGeocodeLocation(self) { placemarks, error in
+                    guard error == nil else {
+                        Logger(label: "").error("Something went wrong", metadata: ["error": "\(error!.localizedDescription)"])
+                        continuation.resume(returning: nil)
+                        return
+                    }
+                    let placemark = placemarks?.first
+                    continuation.resume(returning: placemark)
                 }
-                let placemark = placemarks?.first
-                continuation.resume(returning: placemark)
             }
         }
     }
-}
 #endif
