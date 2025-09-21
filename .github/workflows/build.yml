@@ -143,7 +143,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     env:
-      SWIFTWASM_TAG: swift-latest
+      SWIFTWASM_TAG: latest
 
     steps:
       - name: Checkout repository
