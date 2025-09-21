@@ -19,10 +19,6 @@ var deps: [Package.Dependency] = [
         url: "https://github.com/neallester/swift-log-testing",
         from: "0.0.1"
     ),
-    .package(
-        url: "https://github.com/apple/swift-docc-plugin",
-        from: "1.3.0"
-    ),
 ]
 
 #if false // (os(Linux) || os(Android))
@@ -59,9 +55,6 @@ let package = Package(
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
             ],
-            plugins: [
-                .plugin(name: "Swift-DocC", package: "swift-docc-plugin")
-            ]
         ),
 
         .testTarget(
