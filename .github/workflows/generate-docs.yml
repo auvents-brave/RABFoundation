@@ -1,4 +1,4 @@
-name: Generate and Push Swift Documentation
+name: Deploy Swift Documentation to GitHub Pages
 
 on:
   push:
@@ -6,40 +6,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-docs:
+  deploy-docs:
     runs-on: macos-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Generate documentation using SwiftPM DocC plugin
+      - name: Generate Swift DocC documentation
         run: |
           swift package \
-            --allow-writing-to-directory ./docc-html \
+            --allow-writing-to-directory ./docs \
             generate-documentation \
             --target RabFoundation \
-            --output-path ./docc-html \
+            --output-path ./docs \
             --transform-for-static-hosting \
-            --hosting-base-path swift-docs
+            --hosting-base-path RabFoundation
 
-      - name: Clone wiki repo
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git clone https://x-access-token:${TOKEN}@github.com/auvents-brave/RabFoundation.wiki.git wiki
-
-      - name: Copy generated docs to wiki
-        run: |
-          rm -rf wiki/docs
-          mkdir -p wiki/docs
-          cp -r docc-html/* wiki/docs/
-
-      - name: Commit and push docs to wiki
-        run: |
-          cd wiki
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add .
-          git commit -m "Update Swift documentation" || echo "No changes to commit"
-          git push
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          force_orphan: true
