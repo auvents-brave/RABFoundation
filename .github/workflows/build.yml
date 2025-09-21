@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -48,7 +48,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,OS=18.4' \
+            -destination 'platform=iOS Simulator,OS=18.4, name=iPhone 16e' \
             clean build
 
   build-tvos:
@@ -67,7 +67,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk appletvsimulator \
-            -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=17.0' \
+            -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=18.4' \
             clean build
 
   build-watchos:
@@ -86,7 +86,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk watchsimulator \
-            -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=10.0' \
+            -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=18.4' \
             clean build
 
   build-visionos:
@@ -131,6 +131,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: swift-actions/setup-swift@v2.3.0
+        with:
+          swift-version: "5.8"
 
       - run: swift --version
 
