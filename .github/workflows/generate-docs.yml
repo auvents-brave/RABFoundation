@@ -15,16 +15,19 @@ jobs:
 
       - name: Generate documentation using SwiftPM DocC plugin
         run: |
-          swift package --allow-writing-to-directory ./docc-html \
-            generate-documentation \
-            --target rab-foundation \
+          swift package \
+            --allow-writing-to-directory ./docc-html \
+            plugin generate-documentation \
+            --target RabFoundation \
             --output-path ./docc-html \
             --transform-for-static-hosting \
             --hosting-base-path swift-docs
 
       - name: Clone wiki repo
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone https://github.com/${{ github.repository_owner }}/RabFoundation.wiki.git wiki
+          git clone https://x-access-token:${TOKEN}@github.com/auvents-brave/RabFoundation.wiki.git wiki
 
       - name: Copy generated docs to wiki
         run: |
