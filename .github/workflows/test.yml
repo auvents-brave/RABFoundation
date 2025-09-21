@@ -9,6 +9,9 @@ jobs:
   test-job:
     runs-on: macos-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
       - name: Build documentation with DocC
         run: |
           echo "Hello world"
