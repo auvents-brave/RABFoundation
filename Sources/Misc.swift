@@ -4,7 +4,7 @@ import Foundation
  Indicates whether the current process is running under a unit test environment.
 
  Useful for conditional code paths that should only execute during automated testing.
- - attention: Does not work as expected on Windows.
+ - attention: Does not work as expected.
  */
 public let isRunningTests: Bool = {
     return true

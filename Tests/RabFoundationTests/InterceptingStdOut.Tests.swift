@@ -1,6 +1,7 @@
 #if !os(Windows) && !os(Linux) && !os(Android)
-    @testable import RabFoundation
     import Testing
+
+    @testable import RabFoundation
 
     @Test("Intercepting StdOut") func Log() async throws {
         var output: any TextOutputStream = ""

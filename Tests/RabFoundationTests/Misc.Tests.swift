@@ -1,15 +1,11 @@
 import Foundation
-@testable import RabFoundation
 import Testing
+
+@testable import RabFoundation
 
 @Suite
 struct MiscTests {
-    @Test func IsRunningTest() async throws {
-    #if os(Windows) || os(Linux) || os(Android)
-            for (key, value) in ProcessInfo.processInfo.environment {
-                print("\(key): \(value)")
-            }
-#endif
+    @Test("IsRunningTests") func IsRunningTests() async throws {
         #expect(isRunningTests)
     }
 }

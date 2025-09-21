@@ -7,6 +7,8 @@ extension Date {
         case asLocalTime
     }
 
+    /// Initializes a `Date` from an ISO 8601 formatted string, accepting optional fractional seconds.
+    /// Logs an error if the string cannot be parsed.
     init(fromISO: String) {
         self.init()
 
@@ -25,6 +27,12 @@ extension Date {
         self = date
     }
 
+    /// Returns a formatted date string using the provided formatter.
+    /// Adjusts the formatter's time zone based on the `display` mode.
+    /// - Parameters:
+    ///   - display: Specifies whether to display as universal or local time.
+    ///   - formatter: The `DateFormatter` to use for formatting.
+    /// - Returns: The formatted date string.
     func Display(display: DisplayAs, formatter: DateFormatter) -> String {
         formatter.timeZone = if display == .asUniversalTime {
             TimeZone(abbreviation: "UTC")
@@ -34,6 +42,10 @@ extension Date {
         return formatter.string(from: self)
     }
 
+    /// Returns a formatted date string using a default medium style date and time formatter.
+    /// Adjusts the time zone based on the `display` mode.
+    /// - Parameter display: Specifies whether to display as universal or local time.
+    /// - Returns: The formatted date string.
     func Display(display: DisplayAs) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

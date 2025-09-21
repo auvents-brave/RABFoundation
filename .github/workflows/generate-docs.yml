@@ -1,0 +1,50 @@
+name: Generate and Push Swift Documentation
+
+on:
+  push:
+    branches: [main]  # or whichever branch you want
+
+jobs:
+  generate-docs:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build documentation with DocC
+      run: |
+        mkdir -p docs
+        xcodebuild docbuild \
+          -scheme rab-foundation \
+          -destination 'platform=iOS Simulator,name=iPhone 14' \
+          -derivedDataPath docs
+
+    - name: Convert DocC to static HTML
+      run: |
+        DOCC_OUTPUT=$(find docs -type d -name "*.doccarchive")
+        mkdir -p docc-html
+        for archive in $DOCC_OUTPUT; do
+          xcrun docc process-archive transform-for-static-hosting "$archive" \
+            --output-path docc-html \
+            --hosting-base-path swift-docs
+        done
+
+    - name: Clone wiki
+      run: |
+        git clone https://github.com/${{ github.repository }}.wiki.git wiki
+
+    - name: Copy generated docs to Wiki
+      run: |
+        rm -rf wiki/docs
+        mkdir -p wiki/docs
+        cp -r docc-html/* wiki/docs/
+
+    - name: Commit and push to Wiki
+      run: |
+        cd wiki
+        git config user.name "GitHub Action"
+        git config user.email "action@github.com"
+        git add .
+        git commit -m "Update documentation"
+        git push

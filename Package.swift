@@ -7,17 +7,37 @@ var prods: [Product] = [
     .library(
         name: "RABFoundation",
         targets: ["RabFoundation"]
-    )
+    ),
 ]
 
-#if (os(Linux) || os(Android))
-prods.append(.library(name: "swift-doc", targets: ["RabFoundation"]))
+var deps: [Package.Dependency] = [
+    .package(
+        url: "https://github.com/apple/swift-log",
+        from: "1.6.0"
+    ),
+    .package(
+        url: "https://github.com/neallester/swift-log-testing",
+        from: "0.0.1"
+    ),
+]
+
+#if false // (os(Linux) || os(Android))
+prods.append(
+    .library(
+        name: "swift-doc",
+        targets: ["RabFoundation"]
+    ))
+deps.append(
+    .package(
+        url: "https://github.com/apple/swift-docc-plugin",
+        from: "1.4.0"
+    ))
 #endif
 
 let package = Package(
     name: "rab-foundation",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v11),
         .macCatalyst(.v13),
         .iOS(.v13),
         .tvOS(.v13),
@@ -25,13 +45,10 @@ let package = Package(
         .visionOS(.v1),
     ],
 
-    // products: [.library( name: "RabFoundation", targets: ["RabFoundation"],),],
     products: prods,
 
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
-        .package(url: "https://github.com/neallester/swift-log-testing", from: "0.0.0"),
-    ],
+    dependencies: deps,
+
     targets: [
         .target(
             name: "RabFoundation",

@@ -1,10 +1,11 @@
 #if !os(Windows) && !os(Linux) && !os(Android)
     import Foundation
-    @testable import RabFoundation
     import Testing
 
-    @Suite struct UserDefaultsCloudSyncTests {
-        @Test(arguments: [nil, "shared"])
+    @testable import RabFoundation
+
+    @Suite("UserDefaults and iCloud Sync") struct UserDefaultsCloudSyncTests {
+        @Test("Pushing Data to iCloud", arguments: [nil, "shared"])
         func SyncToCloud(_ value: String?) {
             let mockDefaults = UserDefaults(suiteName: "TestDefaults")!
             mockDefaults.set("me", forKey: "shared_username")
@@ -24,7 +25,7 @@
             // #expect(mockStore.dictionaryRepresentation.count == (value == nil ? 3 : 2))
         }
 
-        @Test
+        @Test("Handle iCloud Change Event")
         func iCloudDidChange() async throws {
             let mockStore = MockUbiquitousStore()
             mockStore.set("P@ssword", forKey: "password")
@@ -65,3 +66,4 @@
         }
     }
 #endif
+

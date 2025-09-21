@@ -1,5 +1,6 @@
-@testable import RabFoundation
 import Testing
+
+@testable import RabFoundation
 
 @Test("Strip HTML tags, decode HTML entities", arguments: [
     ("I told my computer I needed a break, and now it won’t stop sending me KitKat ads.", false, ""),
@@ -14,8 +15,8 @@ import Testing
 func cleanHTML(_ value: (String, Bool, String)) {
     #expect(isHTML(value.0) == value.1)
     /*
-    if value.1 {
-        #expect(CleanHTML(from: value.0) == value.2)
-    }
-    */
+     if value.1 {
+         #expect(CleanHTML(from: value.0) == value.2)
+     }
+     */
 }

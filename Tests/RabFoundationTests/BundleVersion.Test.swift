@@ -1,9 +1,10 @@
 import Foundation
-@testable import RabFoundation
 import Testing
 
-@Test func BundleVersionTest() async throws {
+@testable import RabFoundation
 
+@Test("Bundle+Version")
+func BundleVersionTest() async throws {
     // Missing or bad CFBundle info in our app's Info.plist.
     #expect(Versioning.GetDisplayedVersion(nil) == "Unknown version")
 
@@ -18,7 +19,7 @@ import Testing
     #expect(Versioning.GetDisplayedVersion(plist) == "1.0 (99)")
 
     // Call our Bundle extensions to get correct code coverage
-    let _ = Bundle.module.releaseVersion
-    let _ = Bundle.module.buildNumber
-    let _ = Bundle.module.displayedVersion
+    _ = Bundle.module.releaseVersion
+    _ = Bundle.module.buildNumber
+    _ = Bundle.module.displayedVersion
 }
