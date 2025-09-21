@@ -15,8 +15,8 @@ import Testing
      but Linux's Foundation implementation or ICU data includes the AM/PM (6 Aug 2025 at 10:29:23 AM).
      */
     #if os(Windows) || os(Linux) || os(Android)
-        #expect("26 Aug 2025 at 10:29:23" == dd.Display(display: .asUniversalTime))
-        #expect("26 Aug 2025 at 12:29:23" == dd.Display(display: .asLocalTime))
+        #expect("26 Aug 2025 at 10:29:23 AM" == dd.Display(display: .asUniversalTime))
+        #expect("26 Aug 2025 at 12:29:23 AM" == dd.Display(display: .asLocalTime))
     #else
         #expect("26 Aug 2025 at 10:29:23" == dd.Display(display: .asUniversalTime))
         #expect("26 Aug 2025 at 12:29:23" == dd.Display(display: .asLocalTime))
@@ -24,8 +24,13 @@ import Testing
 
     let formatter = DateFormatter()
     formatter.dateFormat = "dd MMM yyyy 'at' HH:mm"
-    #expect("26 Aug 2025 at 10:29" == dd.Display(display: .asUniversalTime, formatter: formatter))
-    #expect("26 Aug 2025 at 12:29" == dd.Display(display: .asLocalTime, formatter: formatter))
+    #if os(Windows) || os(Linux) || os(Android)
+        #expect("26 Aug 2025 at 10:29 AM" == dd.Display(display: .asUniversalTime, formatter: formatter))
+        #expect("26 Aug 2025 at 12:29 AM" == dd.Display(display: .asLocalTime, formatter: formatter))
+    #else
+        #expect("26 Aug 2025 at 10:29" == dd.Display(display: .asUniversalTime, formatter: formatter))
+        #expect("26 Aug 2025 at 12:29" == dd.Display(display: .asLocalTime, formatter: formatter))
+    #endif
 
     let withoutNano = Calendar.current.date(from: DateComponents(
         timeZone: TimeZone(abbreviation: "GMT"),
