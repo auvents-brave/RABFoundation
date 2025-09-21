@@ -1,0 +1,98 @@
+name: Build Swift Package on Multiple Platforms
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-macos:
+    name: Build & Test macOS + iOS + tvOS + watchOS + visionOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Swift 6.1 toolchain
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '6.1'
+
+      - name: Build Swift Package (macOS)
+        run: swift build --disable-sandbox
+
+      - name: Run Tests (macOS)
+        run: swift test --disable-sandbox
+
+      - name: Build for iOS Simulator
+        run: |
+          xcodebuild \
+            -scheme RabFoundation \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
+            clean build
+
+      - name: Build for tvOS Simulator
+        run: |
+          xcodebuild \
+            -scheme RabFoundation \
+            -sdk appletvsimulator \
+            -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=17.0' \
+            clean build
+
+      - name: Build for watchOS Simulator
+        run: |
+          xcodebuild \
+            -scheme RabFoundation \
+            -sdk watchsimulator \
+            -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=10.0' \
+            clean build
+
+      - name: Build for visionOS Simulator
+        run: |
+          xcodebuild \
+            -scheme RabFoundation \
+            -sdk visionossimulator \
+            -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
+            clean build
+
+  build-linux:
+    name: Build & Test Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Swift 6.1 toolchain
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '6.1'
+
+      - name: Build Swift Package (Linux)
+        run: swift build --disable-sandbox
+
+      - name: Run Tests (Linux)
+        run: swift test --disable-sandbox
+
+  build-windows:
+    name: Build & Test Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Swift 6.1 toolchain
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '6.1'
+
+      - name: Build Swift Package (Windows)
+        run: swift build --disable-sandbox
+
+      - name: Run Tests (Windows)
+        run: swift test --disable-sandbox

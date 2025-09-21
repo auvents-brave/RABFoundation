@@ -19,23 +19,14 @@ var deps: [Package.Dependency] = [
         url: "https://github.com/neallester/swift-log-testing",
         from: "0.0.1"
     ),
-    .package(
-        url: "https://github.com/apple/swift-docc-plugin",
-        from: "1.3.0"
-    ),
 ]
 
-#if false // (os(Linux) || os(Android))
-prods.append(
-    .library(
-        name: "swift-doc",
-        targets: ["RabFoundation"]
-    ))
-deps.append(
-    .package(
-        url: "https://github.com/apple/swift-docc-plugin",
-        from: "1.4.0"
-    ))
+#if !os(macOS)
+    deps.append(
+        .package(
+            url: "https://github.com/apple/swift-docc-plugin",
+            from: "1.4.0"
+        ))
 #endif
 
 let package = Package(
