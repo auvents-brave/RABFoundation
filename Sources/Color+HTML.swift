@@ -79,9 +79,7 @@
                 return String(format: "%@%02X%02X%02X", includeHash ? "#" : "", r, g, b)
             }
         }
-    #endif
-
-    #if canImport(AppKit)
+    #elseif canImport(AppKit)
         /// Extensions to `NSColor` for convenient bridging to and from HTML hex strings.
         extension NSColor {
             /// Initializes an `NSColor` from an HTML hex string.
