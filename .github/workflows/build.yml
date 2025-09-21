@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -57,7 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -76,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -95,7 +95,7 @@ jobs:
 #    steps:
 #      - uses: actions/checkout@v3
 
- #     - uses: swift-actions/setup-swift@v2.3.0
+ #     - uses: swift-actions/setup-swift@next
  #       with:
  #         swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -114,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@next
+      - uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
