@@ -18,10 +18,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Swift 6.1 toolchain
+      - name: Setup Swift 5.9 toolchain
         uses: swift-actions/setup-swift@v1
         with:
-          swift-version: '6.1'
+          swift-version: '5.9'
 
       - name: Build Swift Package (macOS)
         run: swift build --disable-sandbox
@@ -68,10 +68,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Swift 6.1 toolchain
+      - name: Setup Swift 5.9 toolchain
         uses: swift-actions/setup-swift@v1
         with:
-          swift-version: '6.1'
+          swift-version: '5.9'
 
       - name: Build Swift Package (Linux)
         run: swift build --disable-sandbox
@@ -86,13 +86,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Swift 6.1 toolchain
+      - name: Setup Swift 5.9 toolchain
         uses: swift-actions/setup-swift@v1
         with:
-          swift-version: '6.1'
+          swift-version: '5.9'
 
       - name: Build Swift Package (Windows)
         run: swift build --disable-sandbox
 
       - name: Run Tests (Windows)
         run: swift test --disable-sandbox
+
+  build-android:
+    name: Build for Android (experimental)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Android SDK and NDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip wget
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+          unzip cmdline-tools.zip -d $HOME/Android
+          mkdir -p $HOME/Android/cmdline-tools/latest
+          mv $HOME/Android/cmdline-tools/* $HOME/Android/cmdline-tools/latest/
+          export ANDROID_SDK_ROOT=$HOME/Android
+          yes | $HOME/Android/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platforms;android-33" "build-tools;33.0.2" "ndk;25.1.8937393"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+
+      - name: Setup Swift 5.9 toolchain
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.9'
+
+      - name: Build Swift Package for Android
+        run: |
+          # Replace with your actual Android build command/script
+          swift build --disable-sandbox --triple aarch64-unknown-linux-android
