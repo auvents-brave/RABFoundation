@@ -137,3 +137,30 @@ jobs:
 #      - run: swift build --disable-sandbox
 #
 #      - run: swift test --disable-sandbox
+
+build-wasm:
+  name: Build & Test for WebAssembly (SwiftWasm)
+  runs-on: ubuntu-22.04
+
+  env:
+    SWIFTWASM_TAG: swift-6.1
+
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Build Swift Package for WebAssembly
+      run: |
+        docker run --rm \
+          -v "$(pwd):/src" \
+          -w /src \
+          ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
+          carton bundle
+
+    - name: Run Swift Tests in WebAssembly
+      run: |
+        docker run --rm \
+          -v "$(pwd):/src" \
+          -w /src \
+          ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
+          carton test
