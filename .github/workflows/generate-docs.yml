@@ -17,7 +17,7 @@ jobs:
         run: |
           swift package --allow-writing-to-directory ./docc-html \
             generate-documentation \
-            --target rab-foundation \
+            --target RabFoundation \
             --output-path ./docc-html \
             --transform-for-static-hosting \
             --hosting-base-path swift-docs
