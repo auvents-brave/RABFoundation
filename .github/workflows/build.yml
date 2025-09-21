@@ -24,6 +24,8 @@ jobs:
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
+      - run: swift --version
+
       - run: swift build --disable-sandbox
 
       - run: swift test --disable-sandbox
@@ -37,6 +39,8 @@ jobs:
       - uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: swift --version
 
       - run: |
           xcodebuild \
@@ -55,6 +59,8 @@ jobs:
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
+      - run: swift --version
+
       - run: |
           xcodebuild \
             -scheme RabFoundation \
@@ -71,6 +77,8 @@ jobs:
       - uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: swift --version
 
       - run: |
           xcodebuild \
@@ -89,6 +97,8 @@ jobs:
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
+      - run: swift --version
+
       - run: |
           xcodebuild \
             -scheme RabFoundation \
@@ -106,6 +116,8 @@ jobs:
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
+      - run: swift --version
+
       - run: swift build --disable-sandbox
 
       - run: swift test --disable-sandbox
@@ -119,6 +131,8 @@ jobs:
       - uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: swift --version
 
       - run: swift build --disable-sandbox
 
