@@ -48,7 +48,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.4' \
+            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=26.0' \
             clean build
 
   build-tvos:
@@ -65,7 +65,7 @@ jobs:
 
       - run: |
           xcodebuild \
-            -scheme RabFoundation \
+            -scheme rab-foundation \
             -sdk appletvsimulator \
             -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=18.4' \
             clean build
@@ -84,7 +84,7 @@ jobs:
 
       - run: |
           xcodebuild \
-            -scheme RabFoundation \
+            -scheme rab-foundation \
             -sdk watchsimulator \
             -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=18.4' \
             clean build
@@ -103,7 +103,7 @@ jobs:
 
       - run: |
           xcodebuild \
-            -scheme RabFoundation \
+            -scheme rab-foundation \
             -sdk visionossimulator \
             -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
             clean build
@@ -114,7 +114,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
