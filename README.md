@@ -2,7 +2,8 @@
 
 A small pure and cross-platform Swift library (usable on Windows or WebAssembly for example). Without any specific context, it just includes reusable code, covering very different topics.
 
-![platform](https://img.shields.io/badge/platform-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20visionOS%20%7C%20Linux%20%7C%20Windows%20%7C%20WebAssembly-lightgrey) [![CodeQL](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql) [![Docs](https://img.shields.io/badge/docs-available-brightgreen)](https://auvents-brave.github.io/RABFoundation/)
+![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20visionOS-lightgrey)
+ [![CodeQL](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql) [![Docs](https://img.shields.io/badge/docs-available-brightgreen)](https://auvents-brave.github.io/RABFoundation/)
 
 >  One day I created a folder on my HD to move various documents to organise or destroy at a later time. I called it ["rubrique à brac"](https://fr.wikipedia.org/wiki/rubrique-à-brac), from the name of a French comic book series. Years later, when I was thinking about creating my first library to store code that could be used in different applications, the name RabLib just popped into my head!
 
