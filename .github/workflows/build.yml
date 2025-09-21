@@ -30,6 +30,24 @@ jobs:
 
       - run: swift test --disable-sandbox
 
+  build-maccatalyst:
+    name: Build macCatalyst
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: swift-actions/setup-swift@next
+        with:
+          swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: swift --version
+
+      - run: |
+          xcodebuild \
+            -scheme rab-foundation \
+            -destination 'platform=macOS,variant=Mac Catalyst' \
+            clean build
+
   build-ios:
     name: Build iOS Simulator
     runs-on: macos-latest

@@ -36,7 +36,7 @@ let package = Package(
         .macCatalyst(.v13),
         .iOS(.v14),
         .tvOS(.v14),
-        .watchOS(.v6),
+        .watchOS(.v9),
         .visionOS(.v1),
     ],
 
