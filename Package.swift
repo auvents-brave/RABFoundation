@@ -32,7 +32,7 @@ var deps: [Package.Dependency] = [
 let package = Package(
     name: "rab-foundation",
     platforms: [
-        .macOS(.v11),
+        .macOS(.v12),
         .macCatalyst(.v14),
         .iOS(.v14),
         .tvOS(.v14),

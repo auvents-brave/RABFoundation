@@ -1,5 +1,8 @@
 name: Build Swift Package on Multiple Platforms
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
