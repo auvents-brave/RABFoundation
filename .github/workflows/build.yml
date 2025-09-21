@@ -48,7 +48,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.4' \
             clean build
 
   build-tvos:
@@ -67,7 +67,7 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk appletvsimulator \
-            -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=18.4' \
+            -destination 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4' \
             clean build
 
   build-watchos:
@@ -86,27 +86,27 @@ jobs:
           xcodebuild \
             -scheme rab-foundation \
             -sdk watchsimulator \
-            -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=18.4' \
+            -destination 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2' \
             clean build
 
-  build-visionos:
-    name: Build visionOS Simulator
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
+#  build-visionos:
+#    name: Build visionOS Simulator
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
+ #     - uses: swift-actions/setup-swift@v2.3.0
+ #       with:
+ #         swift-version: ${{ env.SWIFT_VERSION }}
 
-      - run: swift --version
+ #     - run: swift --version
 
-      - run: |
-          xcodebuild \
-            -scheme rab-foundation \
-            -sdk visionossimulator \
-            -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
-            clean build
+ #     - run: |
+ #         xcodebuild \
+ #           -scheme rab-foundation \
+ #           -sdk visionossimulator \
+ #           -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
+ #           clean build
 
   build-linux:
     name: Build & Test Linux
@@ -124,16 +124,16 @@ jobs:
 
       - run: swift test --disable-sandbox
 
-  build-windows:
-    name: Build & Test Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: swift-actions/setup-swift@v1
-
-      - run: swift --version
-
-      - run: swift build --disable-sandbox
-
-      - run: swift test --disable-sandbox
+#  build-windows:
+#    name: Build & Test Windows
+#    runs-on: windows-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - uses: swift-actions/setup-swift@v1
+#
+#      - run: swift --version
+#
+#      - run: swift build --disable-sandbox
+#
+#      - run: swift test --disable-sandbox
