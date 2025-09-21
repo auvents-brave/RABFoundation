@@ -19,7 +19,7 @@ env:
 jobs:
   build-macos:
     name: Build & Test macOS
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
 
