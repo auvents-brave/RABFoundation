@@ -2,7 +2,8 @@
 
 A small pure and cross-platform Swift library (usable on Windows or WebAssembly for example). Without any specific context, it just includes reusable code, covering very different topics.
 
-![platform](https://img.shields.io/badge/platform-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20visionOS%20%7C%20Ubuntu%20%7C%20Windows-lightgrey)
+![platform](https://img.shields.io/badge/platform-macOS%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20visionOS%20%7C%20Ubuntu%20%7C%20Windows%20%7C%20WebAssembly-lightgrey)
+
 
 [![CodeQL](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/auvents-brave/RABFoundation/actions/workflows/github-code-scanning/codeql)
 
