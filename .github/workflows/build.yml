@@ -175,10 +175,10 @@ jobs:
 #            ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
 #            carton bundle
 
- #     - name: Run Swift Tests in WebAssembly
- #       run: |
- #         docker run --rm \
-            -v "$(pwd):/src" \
-            -w /src \
-            ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
-            carton test
+#     - name: Run Swift Tests in WebAssembly
+#       run: |
+#         docker run --rm \
+#           -v "$(pwd):/src" \
+#           -w /src \
+#           ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
+#           carton test
