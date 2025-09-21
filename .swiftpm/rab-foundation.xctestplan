@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "F92C8646-9230-4BDA-B2EA-785B23F45234",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "language" : "en-GB",
+    "performanceAntipatternCheckerEnabled" : true,
+    "region" : "GB",
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "RabFoundationTests",
+        "name" : "RabFoundationTests"
+      }
+    }
+  ],
+  "version" : 1
+}

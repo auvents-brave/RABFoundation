@@ -1,31 +1,16 @@
-//
-//  Throttled.swift
-//  RABFoundation
-//
-//  Created by Stéphane on 28/06/2025.
-
 import Foundation
-
-
-
-///  Throttled.swift
-///
-///  Provides a property wrapper to throttle the assignment of values to a property,
-///  ensuring that updates only occur at a specified minimum interval.
-
-
 
 /// A property wrapper that throttles updates to its wrapped value.
 ///
 /// When applied, this wrapper ensures that value assignments only take effect
 /// if a specified time interval has elapsed since the last update.
+///
 /// Useful for cases where frequent updates should be limited, such as for UI state or network calls.
 ///
-/// Example usage:
+/// ## Usage
 /// ```swift
-/// @Throttled(timeInterval: 2) var searchText: String = ""
+/// @Throttled(timeInterval: 2) var searchText = ""
 /// ```
-///
 /// - Parameter Value: The type of value being wrapped.
 @propertyWrapper public struct Throttled<Value> {
     /// The current underlying value, updated only if the throttle interval has passed.
