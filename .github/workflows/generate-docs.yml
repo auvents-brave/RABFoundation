@@ -34,7 +34,7 @@ jobs:
         run: |
           rm -rf wiki/docs
           mkdir -p wiki/docs
-          cp -r docc-html/* wiki/docs/
+          cp -r docs/* wiki/docs/
 
       - name: Commit and push docs to wiki
         run: |
