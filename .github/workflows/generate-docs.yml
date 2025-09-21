@@ -16,12 +16,13 @@ jobs:
       - name: Generate documentation using SwiftPM DocC plugin
         run: |
           swift package \
-            --allow-writing-to-directory ./docc-html \
-            plugin generate-documentation \
-            --target RabFoundation \
-            --output-path ./docc-html \
-            --transform-for-static-hosting \
-            --hosting-base-path swift-docs
+          --allow-writing-to-directory ./docs \
+          generate-documentation \
+          --target RABFoundation \
+          --output-path ./docs \
+          --transform-for-static-hosting \
+          --hosting-base-path RABFoundation
+
 
       - name: Clone wiki repo
         env:
