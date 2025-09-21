@@ -18,7 +18,7 @@ jobs:
 
       - name: Generate documentation
         run: |
-        swift package \
+          swift package \
           --allow-writing-to-directory ./docs \
           generate-documentation \
           --target RabFoundation \
