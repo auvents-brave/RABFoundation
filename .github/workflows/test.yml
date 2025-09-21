@@ -1,0 +1,12 @@
+name: Test Workflow
+
+on: [push]
+
+jobs:
+  test-job:
+    runs-on: macos-latest
+    steps:
+      - name: Run simple commands
+        run: |
+          mkdir -p docs
+          echo "Hello world"
