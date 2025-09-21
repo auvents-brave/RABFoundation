@@ -7,14 +7,9 @@ on:
 
 jobs:
   generate-docs:
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
-      - name: Install Swift 6.1
-        uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: "6.1"
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -22,7 +17,7 @@ jobs:
         run: |
           swift package \
             --allow-writing-to-directory ./docc-html \
-            plugin generate-documentation \
+            generate-documentation \
             --target RabFoundation \
             --output-path ./docc-html \
             --transform-for-static-hosting \
