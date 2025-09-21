@@ -10,51 +10,86 @@ on:
       - main
       - dev
 
+env:
+  SWIFT_VERSION: '5.9'
+
 jobs:
   build-macos:
-    name: Build & Test macOS + iOS + tvOS + watchOS + visionOS
+    name: Build & Test macOS
     runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Swift 5.9 toolchain
-        uses: swift-actions/setup-swift@v1
+      - uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.9'
+          swift-version: ${{ env.SWIFT_VERSION }}
 
-      - name: Build Swift Package (macOS)
-        run: swift build --disable-sandbox
+      - run: swift build --disable-sandbox
 
-      - name: Run Tests (macOS)
-        run: swift test --disable-sandbox
+      - run: swift test --disable-sandbox
 
-      - name: Build for iOS Simulator
-        run: |
+  build-ios:
+    name: Build iOS Simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: |
           xcodebuild \
             -scheme RabFoundation \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
             clean build
 
-      - name: Build for tvOS Simulator
-        run: |
+  build-tvos:
+    name: Build tvOS Simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: |
           xcodebuild \
             -scheme RabFoundation \
             -sdk appletvsimulator \
             -destination 'platform=tvOS Simulator,name=Apple TV 4K,OS=17.0' \
             clean build
 
-      - name: Build for watchOS Simulator
-        run: |
+  build-watchos:
+    name: Build watchOS Simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: |
           xcodebuild \
             -scheme RabFoundation \
             -sdk watchsimulator \
             -destination 'platform=watchOS Simulator,name=Apple Watch Series 8 - 45mm,OS=10.0' \
             clean build
 
-      - name: Build for visionOS Simulator
-        run: |
+  build-visionos:
+    name: Build visionOS Simulator
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ env.SWIFT_VERSION }}
+
+      - run: |
           xcodebuild \
             -scheme RabFoundation \
             -sdk visionossimulator \
@@ -63,65 +98,18 @@ jobs:
 
   build-linux:
     name: Build & Test Linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Swift 5.9 toolchain
-        uses: swift-actions/setup-swift@v1
+      - uses: swift-actions/setup-swift@v2
         with:
-          swift-version: '5.9'
+          swift-version: ${{ env.SWIFT_VERSION }}
 
-      - name: Build Swift Package (Linux)
-        run: swift build --disable-sandbox
+      - run: swift build --disable-sandbox
 
-      - name: Run Tests (Linux)
-        run: swift test --disable-sandbox
+      - run: swift test --disable-sandbox
 
   build-windows:
     name: Build & Test Windows
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Swift 5.9 toolchain
-        uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: '5.9'
-
-      - name: Build Swift Package (Windows)
-        run: swift build --disable-sandbox
-
-      - name: Run Tests (Windows)
-        run: swift test --disable-sandbox
-
-  build-android:
-    name: Build for Android (experimental)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install Android SDK and NDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip wget
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip -d $HOME/Android
-          mkdir -p $HOME/Android/cmdline-tools/latest
-          mv $HOME/Android/cmdline-tools/* $HOME/Android/cmdline-tools/latest/
-          export ANDROID_SDK_ROOT=$HOME/Android
-          yes | $HOME/Android/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platforms;android-33" "build-tools;33.0.2" "ndk;25.1.8937393"
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-
-      - name: Setup Swift 5.9 toolchain
-        uses: swift-actions/setup-swift@v1
-        with:
-          swift-version: '5.9'
-
-      - name: Build Swift Package for Android
-        run: |
-          # Replace with your actual Android build command/script
-          swift build --disable-sandbox --triple aarch64-unknown-linux-android
+    runs-o
