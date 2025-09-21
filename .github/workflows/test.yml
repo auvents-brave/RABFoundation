@@ -1,12 +1,20 @@
-name: Test Workflow
+name: Generate and Push Swift Documentation
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   test-job:
     runs-on: macos-latest
     steps:
-      - name: Run simple commands
+      - name: Build documentation with DocC
         run: |
-          mkdir -p docs
           echo "Hello world"
+          mkdir -p docs
+          xcodebuild docbuild \
+            -scheme rab-foundation \
+            -destination 'platform=macOS' \
+            -derivedDataPath docs \
+            -package-path .
