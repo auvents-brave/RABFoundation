@@ -13,16 +13,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Generate documentation using SwiftPM DocC plugin
+      - name: Clean docs folder
+        run: rm -rf docs
+
+      - name: Generate documentation
         run: |
-          swift package \
+        swift package \
           --allow-writing-to-directory ./docs \
           generate-documentation \
           --target RabFoundation \
           --output-path ./docs \
           --transform-for-static-hosting \
           --hosting-base-path RABFoundation
-
 
       - name: Clone wiki repo
         env:
