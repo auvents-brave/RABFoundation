@@ -3,6 +3,10 @@ import Testing
 
 @testable import RabFoundation
 
+private func stripTrailingAM(_ s: String) -> String {
+    s.hasSuffix(" AM") ? String(s.dropLast(3)) : s
+}
+
 @Test("Create Date from ISO string") func BuildDate() async throws {
     #expect(DateFormatter().locale.identifier == "en_GB")
 
@@ -14,23 +18,13 @@ import Testing
      DateFormatter() is locale-dependent and platform-dependent. For some locales (like "en_GB"), the default medium format on macOS is 6 Aug 2025 at 10:29:23,
      but Linux's Foundation implementation or ICU data includes the AM/PM (6 Aug 2025 at 10:29:23 AM).
      */
-    #if os(Windows) || os(Linux) || os(Android)
-        #expect("26 Aug 2025 at 10:29:23 AM" == dd.Display(display: .asUniversalTime))
-        #expect("26 Aug 2025 at 12:29:23 AM" == dd.Display(display: .asLocalTime))
-    #else
-        #expect("26 Aug 2025 at 10:29:23" == dd.Display(display: .asUniversalTime))
-        #expect("26 Aug 2025 at 12:29:23" == dd.Display(display: .asLocalTime))
-    #endif
+    #expect("26 Aug 2025 at 10:29:23" == stripTrailingAM(dd.Display(display: .asUniversalTime)))
+    #expect("26 Aug 2025 at 12:29:23" == stripTrailingAM(dd.Display(display: .asLocalTime)))
 
     let formatter = DateFormatter()
     formatter.dateFormat = "dd MMM yyyy 'at' HH:mm"
-    #if os(Windows) || os(Linux) || os(Android)
-        #expect("26 Aug 2025 at 10:29 AM" == dd.Display(display: .asUniversalTime, formatter: formatter))
-        #expect("26 Aug 2025 at 12:29 AM" == dd.Display(display: .asLocalTime, formatter: formatter))
-    #else
-        #expect("26 Aug 2025 at 10:29" == dd.Display(display: .asUniversalTime, formatter: formatter))
-        #expect("26 Aug 2025 at 12:29" == dd.Display(display: .asLocalTime, formatter: formatter))
-    #endif
+    #expect("26 Aug 2025 at 10:29" == stripTrailingAM(dd.Display(display: .asUniversalTime, formatter: formatter)))
+    #expect("26 Aug 2025 at 12:29" == stripTrailingAM(dd.Display(display: .asLocalTime, formatter: formatter)))
 
     let withoutNano = Calendar.current.date(from: DateComponents(
         timeZone: TimeZone(abbreviation: "GMT"),
