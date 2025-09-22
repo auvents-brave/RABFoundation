@@ -83,10 +83,6 @@ jobs:
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
-      - name: Show available SDSKs
-        if: matrix.type == 'xcodebuild' && matrix.skip != true
-        run: xcodebuild -showsdks
-
       - name: Skipped target warning
         if: matrix.skip == true
         run: echo "::warning::'${{ matrix.name }}' is ignored for the moment."
@@ -96,7 +92,7 @@ jobs:
         if: matrix.type == 'native' && matrix.skip != true
         run: ${{ matrix.build }}
 
-      - name: Run Tesst (native)
+      - name: Run Tests (native)
         if: matrix.type == 'native' && matrix.skip != true
         run: ${{ matrix.test }}
 
@@ -141,11 +137,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Swift SDK for wasm32-unknown-wasi
-        run: |
-          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
-          echo "7550b4c77a55f4b637c376f5d192f297fe185607003a6212ad608276928db992  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
-          swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+    - name: Install Swift SDK for wasm32-unknown-wasi
+      run: |
+        curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+        echo "9aebccbf90963d3eaaebc5c40f9a26468d0e4ef3811fbd5c82067e03e75a72a4  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
+        swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
       - name: Build for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasi
