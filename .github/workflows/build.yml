@@ -87,6 +87,7 @@ jobs:
 
       - name: Run Tesst (native)
         if: matrix.type == 'native' && matrix.skip != true
+        run: ${{ matrix.test }}
 
 # xcodebuild platforms
       - name: Build with xcodebuild
