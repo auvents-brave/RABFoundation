@@ -131,21 +131,23 @@ jobs:
 
       - run: swift test
 
-  build-wasm:
-    name: Build & Test - WebAssembly
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
+    build-wasm:
+      name: Build & Test for WebAssembly (SwiftWasm 6.2)
+      runs-on: ubuntu-22.04
+      steps:
+        - uses: actions/checkout@v3
 
-      - name: Install Swift SDK for wasm32-unknown-wasi
-        run: |
-          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
-          echo "9aebccbf90963d3eaaebc5c40f9a26468d0e4ef3811fbd5c82067e03e75a72a4  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
-          swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+        - name: Install Swift SDK for wasm32-unknown-wasip1 (Swift 6.2)
+          run: |
+            curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+            echo "YOUR_CORRECT_CHECKSUM_HERE  swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip" | sha256sum --check
+            swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
 
-      - name: Build for WebAssembly
-        run: swift build --swift-sdk wasm32-unknown-wasi
+        - name: Build Swift Package for WebAssembly
+          run: |
+            swift build --swift-sdk wasm32-unknown-wasip1
 
-      - name: Run Tests (limited)
-        continue-on-error: true
-        run: swift test --swift-sdk wasm32-unknown-wasi
+        - name: Test Swift Package (if tests are available)
+          continue-on-error: true  # WASI test support may vary
+          run: |
+            swift test --swift-sdk wasm32-unknown-wasip1
