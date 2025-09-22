@@ -78,7 +78,7 @@ jobs:
 # Swift Setup (non-Windows)
       - name: Setup Swift
         if: matrix.type != 'windows' && matrix.skip != true
-        uses: swift-actions/setup-swift@2.3.0
+        uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
