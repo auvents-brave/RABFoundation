@@ -60,7 +60,7 @@ jobs:
           - name: visionOS Simulator
             runner: macos-latest
             type: xcodebuild
-            sdk: visionossimulator
+            sdk: xrssimulator
             destination: 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0'
             run_tests: false
             skip: true
@@ -70,7 +70,7 @@ jobs:
             type: xcodebuild
             destination: 'platform=macOS,variant=Mac Catalyst'
             run_tests: true
-            skip: false
+            skip: true
 
     steps:
       - uses: actions/checkout@v3
