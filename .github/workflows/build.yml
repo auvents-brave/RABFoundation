@@ -135,7 +135,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@v2.3.0
+      - uses: swift-actions/setup-swift@next
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
@@ -144,6 +144,27 @@ jobs:
       - run: swift build --disable-sandbox
 
       - run: swift test --disable-sandbox
+
+  build-windows:
+    name: Build & Test Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Swift 6.1 on Windows
+        uses: compnerd/gha-setup-swift@main
+        with:
+          branch: swift-6.1-release
+          tag: 6.1-RELEASE
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build Swift Package
+        run: swift build
+
+      - name: Run Tests
+        run: swift test
 
 #  build-windows:
 #    name: Build & Test Windows
