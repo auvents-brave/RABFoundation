@@ -10,7 +10,7 @@ on:
     branches: [main, dev]
 
 env:
-  SWIFT_VERSION: "6.2"
+  SWIFT_VERSION: "6.1"
 
 jobs:
   build-swift-matrix:
@@ -125,13 +125,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Swift 6.1 on Windows
+      - name: Install Swift 6.2 on Windows
         uses: compnerd/gha-setup-swift@main
         with:
-          branch: swift-6.1-release
-          tag: 6.1-RELEASE
-
-      - run: swift --version
+          branch: swift-6.2-release
+          tag: 6.2-RELEASE
 
       - run: swift build
 
@@ -145,9 +143,9 @@ jobs:
 
       - name: Install Swift SDK for wasm32-unknown-wasi
         run: |
-          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.1-RELEASE/swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
-          echo "7550b4c77a55f4b637c376f5d192f297fe185607003a6212ad608276928db992  swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
-          swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+          echo "7550b4c77a55f4b637c376f5d192f297fe185607003a6212ad608276928db992  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
+          swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
       - name: Build for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasi
