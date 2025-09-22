@@ -5,21 +5,59 @@ permissions:
 
 on:
   push:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
 
 env:
   SWIFT_VERSION: "6.1"
 
 jobs:
-  build-macos:
-    name: Build & Test macOS
-    runs-on: macos-latest
+  build-swift-matrix:
+    name: Build & Test - ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - name: macOS
+            runner: macos-latest
+            type: native
+            build: swift build --disable-sandbox
+            test: swift test --disable-sandbox
+
+          - name: Linux
+            runner: ubuntu-22.04
+            type: native
+            build: swift build --disable-sandbox
+            test: swift test --disable-sandbox
+
+          - name: iOS Simulator
+            runner: macos-latest
+            type: xcodebuild
+            sdk: iphonesimulator
+            destination: 'platform=iOS Simulator,name=iPhone 16e,OS=18.4'
+            run_tests: true
+
+          - name: tvOS Simulator
+            runner: macos-latest
+            type: xcodebuild
+            sdk: appletvsimulator
+            destination: 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4'
+            run_tests: true
+
+          - name: watchOS Simulator
+            runner: macos-latest
+            type: xcodebuild
+            sdk: watchsimulator
+            destination: 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2'
+            run_tests: false  # No test support
+
+          - name: macCatalyst
+            runner: macos-latest
+            type: xcodebuild
+            destination: 'platform=macOS,variant=Mac Catalyst'
+            run_tests: true
+
     steps:
       - uses: actions/checkout@v3
 
@@ -29,124 +67,38 @@ jobs:
 
       - run: swift --version
 
-      - run: swift build --disable-sandbox
+      - name: Build Package
+        if: matrix.type == 'native'
+        run: ${{ matrix.build }}
 
-      - run: swift test --disable-sandbox
+      - name: Test Package
+        if: matrix.type == 'native'
+        run: ${{ matrix.test }}
 
-  build-maccatalyst:
-    name: Build macCatalyst
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
+      - name: xcodebuild - List Schemes
+        if: matrix.type == 'xcodebuild'
+        run: xcodebuild -list
 
-      - uses: swift-actions/setup-swift@next
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
-      - run: swift --version
-
-      - run: |
+      - name: Build with xcodebuild
+        if: matrix.type == 'xcodebuild'
+        run: |
           xcodebuild \
             -scheme rab-foundation \
-            -destination 'platform=macOS,variant=Mac Catalyst' \
+            -sdk ${{ matrix.sdk || '' }} \
+            -destination '${{ matrix.destination }}' \
             clean build
 
-  build-ios:
-    name: Build iOS Simulator
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: swift-actions/setup-swift@next
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
-      - run: swift --version
-
-      - run: xcodebuild -list
-
-      - run: |
+      - name: Run Tests with xcodebuild
+        if: matrix.type == 'xcodebuild' && matrix.run_tests == true
+        run: |
           xcodebuild \
             -scheme rab-foundation \
-            -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 16e,OS=18.4' \
-            clean build
-
-  build-tvos:
-    name: Build tvOS Simulator
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: swift-actions/setup-swift@next
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
-      - run: swift --version
-
-      - run: |
-          xcodebuild \
-            -scheme rab-foundation \
-            -sdk appletvsimulator \
-            -destination 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4' \
-            clean build
-
-  build-watchos:
-    name: Build watchOS Simulator
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: swift-actions/setup-swift@next
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
-      - run: swift --version
-
-      - run: |
-          xcodebuild \
-            -scheme rab-foundation \
-            -sdk watchsimulator \
-            -destination 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2' \
-            clean build
-
-#  build-visionos:
-#    name: Build visionOS Simulator
-#    runs-on: macos-latest
-#    steps:
-#      - uses: actions/checkout@v3
-
-#     - uses: swift-actions/setup-swift@next
-#       with:
-#         swift-version: ${{ env.SWIFT_VERSION }}
-
-#     - run: swift --version
-
-#     - run: |
-#         xcodebuild \
-#           -scheme rab-foundation \
-#           -sdk visionossimulator \
-#           -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
-#           clean build
-
-  build-linux:
-    name: Build & Test Linux
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: swift-actions/setup-swift@next
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
-      - run: swift --version
-
-      - run: swift build --disable-sandbox
-
-      - run: swift test --disable-sandbox
+            -sdk ${{ matrix.sdk || '' }} \
+            -destination '${{ matrix.destination }}' \
+            clean test
 
   build-windows:
-    name: Build & Test Windows
+    name: Build & Test - Windows
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -157,58 +109,14 @@ jobs:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
 
-      - name: Show Swift version
-        run: swift --version
+      - run: swift --version
 
-      - name: Build Swift Package
-        run: swift build
+      - run: swift build
 
-      - name: Run Tests
-        run: swift test
-
-#  build-windows:
-#    name: Build & Test Windows
-#    runs-on: windows-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - uses: swift-actions/setup-swift@v1
-#
-#      - run: swift --version
-#
-#      - run: swift build --disable-sandbox
-#
-#      - run: swift test --disable-sandbox
-
-#  build-carton:
-#    name: Build & Test for WebAssembly (SwiftWasm)
-#    runs-on: ubuntu-22.04
-
-#   env:
-#     SWIFTWASM_TAG: latest     # 5.9.2
-
-#   steps:
-#     - name: Checkout repository
-#       uses: actions/checkout@v3
-
-#      - name: Build Swift Package for WebAssembly
-#         run: |
-#           docker run --rm \
-#             -v "$(pwd):/src" \
-#             -w /src \
-#             ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
-#             carton bundle
-
-#      - name: Run Swift Tests in WebAssembly
-#        run: |
-#          docker run --rm \
-#            -v "$(pwd):/src" \
-#            -w /src \
-#            ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
-#            carton test
+      - run: swift test
 
   build-wasm:
-    name: Build & Test for WebAssembly (SwiftWasm)
+    name: Build & Test - WebAssembly (SwiftWasm)
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -219,11 +127,9 @@ jobs:
           echo "7550b4c77a55f4b637c376f5d192f297fe185607003a6212ad608276928db992  swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
           swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
-      - name: Build Swift Package for WebAssembly
-        run: |
-          swift build --swift-sdk wasm32-unknown-wasi
+      - name: Build for WebAssembly
+        run: swift build --swift-sdk wasm32-unknown-wasi
 
-      - name: Test Swift Package (if tests are available)
-        continue-on-error: true  # WASI test support may vary
-        run: |
-          swift test --swift-sdk wasm32-unknown-wasi
+      - name: Run Tests (limited)
+        continue-on-error: true
+        run: swift test --swift-sdk wasm32-unknown-wasi
