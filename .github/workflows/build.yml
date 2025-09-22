@@ -24,12 +24,14 @@ jobs:
             type: native
             build: swift build --disable-sandbox
             test: swift test --disable-sandbox
+            skip: false
 
           - name: Linux
             runner: ubuntu-22.04
             type: native
             build: swift build --disable-sandbox
             test: swift test --disable-sandbox
+            skip: false
 
           - name: iOS Simulator
             runner: macos-latest
@@ -37,6 +39,7 @@ jobs:
             sdk: iphonesimulator
             destination: 'platform=iOS Simulator,name=iPhone 16e,OS=18.4'
             run_tests: true
+            skip: false
 
           - name: tvOS Simulator
             runner: macos-latest
@@ -44,6 +47,7 @@ jobs:
             sdk: appletvsimulator
             destination: 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4'
             run_tests: true
+            skip: false
 
           - name: watchOS Simulator (Build only)
             runner: macos-latest
@@ -51,6 +55,7 @@ jobs:
             sdk: watchsimulator
             destination: 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2'
             run_tests: false  # No test support
+            skip: false
 
           - name: visionOS Simulator
             runner: macos-latest
@@ -65,6 +70,7 @@ jobs:
             type: xcodebuild
             destination: 'platform=macOS,variant=Mac Catalyst'
             run_tests: true
+            skip: false
 
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +78,7 @@ jobs:
 # Swift Setup (non-Windows)
       - name: Setup Swift
         if: matrix.type != 'windows' && matrix.skip != true
-        uses: swift-actions/setup-swift@2.3
+        uses: swift-actions/setup-swift@2.3.0
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
