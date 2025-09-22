@@ -83,6 +83,7 @@ jobs:
           swift-version: ${{ env.SWIFT_VERSION }}
 
       - name: Skipped target warning
+        run: xcodebuild -showsdks
         if: matrix.skip == true
         run: echo "::warning::'${{ matrix.name }}' is ignored for the moment."
 
