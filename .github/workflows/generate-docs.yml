@@ -1,7 +1,7 @@
 name: Generate and Push Swift Documentation
 
 permissions:
-  contents: read
+  contents: write
 
 on:
   push:

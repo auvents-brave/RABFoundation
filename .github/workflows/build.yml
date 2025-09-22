@@ -116,18 +116,18 @@ jobs:
 #    steps:
 #      - uses: actions/checkout@v3
 
- #     - uses: swift-actions/setup-swift@next
- #       with:
- #         swift-version: ${{ env.SWIFT_VERSION }}
+#     - uses: swift-actions/setup-swift@next
+#       with:
+#         swift-version: ${{ env.SWIFT_VERSION }}
 
- #     - run: swift --version
+#     - run: swift --version
 
- #     - run: |
- #         xcodebuild \
- #           -scheme rab-foundation \
- #           -sdk visionossimulator \
- #           -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
- #           clean build
+#     - run: |
+#         xcodebuild \
+#           -scheme rab-foundation \
+#           -sdk visionossimulator \
+#           -destination 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0' \
+#           clean build
 
   build-linux:
     name: Build & Test Linux
@@ -159,29 +159,29 @@ jobs:
 #
 #      - run: swift test --disable-sandbox
 
-#  build-wasm:
-#    name: Build & Test for WebAssembly (SwiftWasm)
-#    runs-on: ubuntu-22.04
+  build-wasm:
+    name: Build & Test for WebAssembly (SwiftWasm)
+    runs-on: ubuntu-22.04
 
-#    env:
-#      SWIFTWASM_TAG: latest
+   env:
+     SWIFTWASM_TAG: latest
 
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
+   steps:
+     - name: Checkout repository
+       uses: actions/checkout@v3
 
-#      - name: Build Swift Package for WebAssembly
-#        run: |
-#          docker run --rm \
-#            -v "$(pwd):/src" \
-#            -w /src \
-#            ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
-#            carton bundle
+      - name: Build Swift Package for WebAssembly
+         run: |
+           docker run --rm \
+             -v "$(pwd):/src" \
+             -w /src \
+             ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
+             carton bundle
 
-#     - name: Run Swift Tests in WebAssembly
-#       run: |
-#         docker run --rm \
-#           -v "$(pwd):/src" \
-#           -w /src \
-#           ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
-#           carton test
+      - name: Run Swift Tests in WebAssembly
+        run: |
+          docker run --rm \
+            -v "$(pwd):/src" \
+            -w /src \
+            ghcr.io/swiftwasm/carton:${SWIFTWASM_TAG} \
+            carton test
