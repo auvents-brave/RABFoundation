@@ -45,12 +45,20 @@ jobs:
             destination: 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4'
             run_tests: true
 
-          - name: watchOS Simulator
+          - name: watchOS Simulator (Build only)
             runner: macos-latest
             type: xcodebuild
             sdk: watchsimulator
             destination: 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2'
             run_tests: false  # No test support
+
+          - name: visionOS Simulator
+            runner: macos-latest
+            type: xcodebuild
+            sdk: visionossimulator
+            destination: 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0'
+            run_tests: false
+            skip: true
 
           - name: macCatalyst
             runner: macos-latest
@@ -61,26 +69,28 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: swift-actions/setup-swift@next
+# Swift Setup (non-Windows)
+      - name: Setup Swift
+        if: matrix.type != 'windows' && matrix.skip != true
+        uses: swift-actions/setup-swift@2.3
         with:
           swift-version: ${{ env.SWIFT_VERSION }}
 
-      - run: swift --version
+      - name: Skipped target warning
+        if: matrix.skip == true
+        run: echo "::warning::'${{ matrix.name }}' is ignored for the moment."
 
-      - name: Build Package
-        if: matrix.type == 'native'
+# Native build
+      - name: Build (native)
+        if: matrix.type == 'native' && matrix.skip != true
         run: ${{ matrix.build }}
 
-      - name: Test Package
-        if: matrix.type == 'native'
-        run: ${{ matrix.test }}
+      - name: Run Tesst (native)
+        if: matrix.type == 'native' && matrix.skip != true
 
-      - name: xcodebuild - List Schemes
-        if: matrix.type == 'xcodebuild'
-        run: xcodebuild -list
-
+# xcodebuild platforms
       - name: Build with xcodebuild
-        if: matrix.type == 'xcodebuild'
+        if: matrix.type == 'xcodebuild' && matrix.skip != true
         run: |
           xcodebuild \
             -scheme rab-foundation \
@@ -89,7 +99,7 @@ jobs:
             clean build
 
       - name: Run Tests with xcodebuild
-        if: matrix.type == 'xcodebuild' && matrix.run_tests == true
+        if: matrix.type == 'xcodebuild' && matrix.run_tests == true && matrix.skip != true
         run: |
           xcodebuild \
             -scheme rab-foundation \
@@ -116,7 +126,7 @@ jobs:
       - run: swift test
 
   build-wasm:
-    name: Build & Test - WebAssembly (SwiftWasm)
+    name: Build & Test - WebAssembly
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
