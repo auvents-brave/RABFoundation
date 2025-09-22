@@ -10,7 +10,7 @@ on:
     branches: [main, dev]
 
 env:
-  SWIFT_VERSION: "6.1"
+  SWIFT_VERSION: "6.2"
 
 jobs:
   build-swift-matrix:
@@ -128,8 +128,8 @@ jobs:
       - name: Install Swift 6.1 on Windows
         uses: compnerd/gha-setup-swift@main
         with:
-          swift-build: 6.1-RELEASE
-          swift-version: 6.1
+          branch: swift-6.1-release
+          tag: 6.1-RELEASE
 
       - run: swift --version
 
