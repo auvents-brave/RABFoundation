@@ -19,9 +19,13 @@ var deps: [Package.Dependency] = [
         url: "https://github.com/neallester/swift-log-testing",
         from: "0.0.1"
     ),
+    .package(
+        url: "https://github.com/apple/swift-docc-plugin",
+        from: "1.4.0"
+    ),
 ]
 
-#if !os(macOS)
+#if false // !os(macOS)
     deps.append(
         .package(
             url: "https://github.com/apple/swift-docc-plugin",
@@ -50,6 +54,9 @@ let package = Package(
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
             ],
+            plugins: [
+                .plugin(name: "Swift-DocC-Plugin", package: "swift-docc-plugin")
+            ]
         ),
 
         .testTarget(
