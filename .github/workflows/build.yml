@@ -137,11 +137,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-    - name: Install Swift SDK for wasm32-unknown-wasi
-      run: |
-        curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
-        echo "9aebccbf90963d3eaaebc5c40f9a26468d0e4ef3811fbd5c82067e03e75a72a4  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
-        swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+      - name: Install Swift SDK for wasm32-unknown-wasi
+        run: |
+          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
+          echo "9aebccbf90963d3eaaebc5c40f9a26468d0e4ef3811fbd5c82067e03e75a72a4  swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip" | sha256sum --check
+          swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
       - name: Build for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasi
