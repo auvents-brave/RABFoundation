@@ -17,6 +17,7 @@ jobs:
     name: Build & Test - ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: macOS
