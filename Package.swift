@@ -54,9 +54,6 @@ let package = Package(
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
             ],
-            plugins: [
-                .plugin(name: "Swift-DocC-Plugin", package: "swift-docc-plugin")
-            ]
         ),
 
         .testTarget(
