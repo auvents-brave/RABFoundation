@@ -1,6 +1,6 @@
-import Foundation
+#if !(os(Windows) || os(WASI))
+    import Foundation
 
-#if !os(Windows)
     /// Additionally writes any data written to standard output into the given
     /// output stream.
     ///
