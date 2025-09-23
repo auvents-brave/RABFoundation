@@ -22,23 +22,27 @@ jobs:
           - name: macOS 26
             runner: macos-26
             skip: true
-            relax_tests: false
+            relax: false
           - name: macOS 15
             runner: macos-15
             skip: false
-            relax_tests: false
+            relax: false
           - name: macOS 14
             runner: macos-14
             skip: false
-            relax_tests: true
+            relax: true
           - name: macOS 13
             runner: macos-13
             skip: false
-            relax_tests: true
+            relax: true
+          - name: Ubuntu 22.04 LTS
+            runner: ubuntu-22.04
+            skip: false
+            relax: false
           - name: Ubuntu 24.04 LTS
             runner: ubuntu-24.04
             skip: false
-            relax_tests: false
+            relax: false
     steps:
       - uses: actions/checkout@v3
       - name: Skipped target warning
@@ -46,16 +50,21 @@ jobs:
         run: 'echo "::warning::''${{ matrix.name }}'' is ignored for the moment."'
       - name: Setup Swift
         if: matrix.skip != true
-        uses: swift-actions/setup-swift@v2.3.0
+        uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
       - name: Build
         if: matrix.skip != true
-        run: swift build
+        run: |
+          if [[ "${{ matrix.relax }}" == "true" ]]; then
+            swift build -Xswiftc -enable-actor-data-race-checks=no
+          else
+            swift build
+          fi
       - name: Run Tests
         if: matrix.skip != true
         run: |
-          if [[ "${{ matrix.relax_tests }}" == "true" ]]; then
+          if [[ "${{ matrix.relax }}" == "true" ]]; then
             swift test -Xswiftc -enable-actor-data-race-checks=no
           else
             swift test
@@ -125,7 +134,7 @@ jobs:
           test
   build-windows:
     name: Windows (6.2)
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - uses: actions/checkout@v3
       - name: Install Swift 6.2 on Windows
@@ -142,16 +151,16 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Swift SDK for wasm32-unknown-wasip1
         run: >
-          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.1-RELEASE/swift-wasm-6.1-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.1-RELEASE/swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
           
-          unzip -q swift-wasm-6.1-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+          unzip -q swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
-          swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasip1.artifactbundle
+          swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle
       - name: Build Swift Package for WebAssembly
-        run: swift build --swift-sdk wasm32-unknown-wasip1
+        run: swift build --swift-sdk wasm32-unknown-wasi
       - name: Test Swift Package (if tests are available)
         continue-on-error: true
-        run: swift test --swift-sdk wasm32-unknown-wasip1
+        run: swift test --swift-sdk wasm32-unknown-wasi
   build-wasm2:
     name: WebAssembly (6.2)
     runs-on: ubuntu-22.04
