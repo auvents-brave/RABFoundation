@@ -11,6 +11,7 @@
             return mark.name ?? ""
         }
 
+        nonisolated(nonsending)
         func reverseLocation() async -> CLPlacemark? {
             return await withCheckedContinuation { continuation in
                 CLGeocoder().reverseGeocodeLocation(self) { placemarks, error in

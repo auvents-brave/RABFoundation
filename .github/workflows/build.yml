@@ -57,7 +57,7 @@ jobs:
         if: matrix.skip != true
         run: |
           if [[ "${{ matrix.relax }}" == "true" ]]; then
-            swift build -Xswiftc -enable-actor-data-race-checks=no
+            swift build
           else
             swift build
           fi
@@ -65,13 +65,13 @@ jobs:
         if: matrix.skip != true
         run: |
           if [[ "${{ matrix.relax }}" == "true" ]]; then
-            swift test -Xswiftc -enable-actor-data-race-checks=no
+            swift test
           else
             swift test
           fi
   build-xcodebuild-matrix:
     name: '${{ matrix.name }} (6.1)'
-    runs-on: ${{ matrix.name == 'visionOS Simulator' && 'macos-15-arm64' || 'macos-15' }}
+    runs-on: ${{ matrix.name == 'visionOS Simulator' && 'macos-latest-arm64' || 'macos-15' }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -110,13 +110,13 @@ jobs:
         run: 'echo "::warning::''${{ matrix.name }}'' is ignored for the moment."'
       - name: Setup Swift
         if: matrix.skip != true
-        uses: swift-actions/setup-swift@v2.3.0
+        uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
       - name: Build
         if: matrix.skip != true
         working-directory: ${{ github.workspace }}
-        run: |
+        run: >
           xcodebuild
           -scheme rab-foundation
           -sdk ${{ matrix.sdk }}
@@ -124,7 +124,7 @@ jobs:
       - name: Run Tests
         if: matrix.run_tests == true && matrix.skip != true
         working-directory: ${{ github.workspace }}
-        run: |
+        run: >
           xcodebuild
           -scheme rab-foundation
           -sdk ${{ matrix.sdk }}
