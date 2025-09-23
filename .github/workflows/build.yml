@@ -57,7 +57,7 @@ jobs:
         include:
           - name: iOS Simulator
             sdk: iphonesimulator
-            destination: 'platform=iOS Simulator,name=Any iOS Simulator Device,OS=18.4'
+            destination: 'platform=iOS Simulator,name=iPhone SE (3rd generation),OS=18.4'
             run_tests: true
             skip: false
           - name: tvOS Simulator
@@ -139,7 +139,7 @@ jobs:
       - name: Test Swift Package (if tests are available)
         continue-on-error: true
         run: swift test --swift-sdk wasm32-unknown-wasi
-  build-wasm2:
+  build-wasmX:
     name: WebAssembly (6.2)
     runs-on: ubuntu-22.04
     steps:
@@ -156,3 +156,37 @@ jobs:
       - name: Test Swift Package (if tests are available)
         continue-on-error: true
         run: swift test --swift-sdk wasm32-unknown-wasip1
+  build-wasm2:
+    name: WebAssembly (6.2)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install SwiftWasm toolchain (via swiftenv)
+        run: >
+          git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
+          echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> $GITHUB_ENV
+          echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> $GITHUB_ENV
+          echo 'eval "$(swiftenv init -)"' >> $GITHUB_ENV
+
+      - name: Install SwiftWasm 6.2 toolchain
+        run: >
+          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-ubuntu22.04.tar.gz
+          mkdir -p ~/.swiftenv/versions/6.2-wasm
+          tar -xzf swift-wasm-6.2-RELEASE-ubuntu22.04.tar.gz -C ~/.swiftenv/versions/6.2-wasm --strip-components=1
+          swiftenv rehash
+          swiftenv local 6.2-wasm
+
+      - name: Install WASI sysroot
+        run: >
+          curl -LO https://github.com/swiftwasm/wasi-sdk/releases/download/wasi-sdk-20/swiftwasm-wasi-sdk-20.0.tar.gz
+          mkdir wasi-sdk
+          tar -xzf swiftwasm-wasi-sdk-20.0.tar.gz -C wasi-sdk --strip-components=1
+          echo "SWIFTFLAGS='-sdk $PWD/wasi-sdk/share/wasi-sysroot'" >> $GITHUB_ENV
+
+      - name: Build Swift Package for WebAssembly
+        run: swift build --triple wasm32-unknown-wasi --build-path .build-wasm
+
+      - name: Test Swift Package (if tests are available)
+        continue-on-error: true
+        run: swift test --triple wasm32-unknown-wasi --build-path .build-wasm
