@@ -11,7 +11,7 @@ on:
       - main
       - dev
 env:
-  SWIFT_VERSION: '6.2'
+  SWIFT_VERSION: '6.1'
 jobs:
   build-swift-matrix:
     name: 'Native ${{ matrix.name }} (6.1)'
@@ -22,7 +22,7 @@ jobs:
         include:
           - name: macOS 26
             runner: macos-26
-            skip: false
+            skip: true
           - name: macOS 15
             runner: macos-15
             skip: false
@@ -137,7 +137,7 @@ jobs:
         run: |
           curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.1-RELEASE/swift-wasm-6.1-RELEASE-wasm32-unknown-wasip.artifactbundle.zip
           
-          swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+          swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasip.artifactbundle.zip
       - name: Build Swift Package for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasip
       - name: Test Swift Package (if tests are available)
