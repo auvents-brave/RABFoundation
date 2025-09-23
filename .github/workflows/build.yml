@@ -22,27 +22,15 @@ jobs:
           - name: macOS 26
             runner: macos-26
             skip: true
-            relax: false
           - name: macOS 15
             runner: macos-15
             skip: false
-            relax: false
-          - name: macOS 14
-            runner: macos-14
-            skip: false
-            relax: true
-          - name: macOS 13
-            runner: macos-13
-            skip: false
-            relax: true
           - name: Ubuntu 22.04 LTS
             runner: ubuntu-22.04
             skip: false
-            relax: false
           - name: Ubuntu 24.04 LTS
             runner: ubuntu-24.04
             skip: false
-            relax: false
     steps:
       - uses: actions/checkout@v3
       - name: Skipped target warning
@@ -55,20 +43,10 @@ jobs:
           swift-version: '${{ env.SWIFT_VERSION }}'
       - name: Build
         if: matrix.skip != true
-        run: |
-          if [[ "${{ matrix.relax }}" == "true" ]]; then
-            swift build
-          else
-            swift build
-          fi
+        run: swift build
       - name: Run Tests
         if: matrix.skip != true
-        run: |
-          if [[ "${{ matrix.relax }}" == "true" ]]; then
-            swift test
-          else
-            swift test
-          fi
+        run: swift test
   build-xcodebuild-matrix:
     name: '${{ matrix.name }} (6.1)'
     runs-on: ${{ matrix.name == 'visionOS Simulator' && 'macos-latest-arm64' || 'macos-15' }}
@@ -79,7 +57,7 @@ jobs:
         include:
           - name: iOS Simulator
             sdk: iphonesimulator
-            destination: 'platform=iOS Simulator,name=iPhone 16e,OS=18.4'
+            destination: 'platform=iOS Simulator,name=Any iOS Simulator Device,OS=18.4'
             run_tests: true
             skip: false
           - name: tvOS Simulator
@@ -97,7 +75,7 @@ jobs:
             sdk: xrssimulator
             destination: 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0'
             run_tests: false
-            skip: false
+            skip: true
           - name: macCatalyst
             sdk: macosx
             destination: 'platform=macOS,variant=Mac Catalyst'
