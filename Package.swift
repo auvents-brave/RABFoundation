@@ -19,10 +19,6 @@ var deps: [Package.Dependency] = [
         url: "https://github.com/neallester/swift-log-testing",
         from: "0.0.1"
     ),
-    .package(
-        url: "https://github.com/apple/swift-docc-plugin",
-        from: "1.4.0"
-    ),
 ]
 
 #if false // !os(macOS)

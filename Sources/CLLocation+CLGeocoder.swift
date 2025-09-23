@@ -20,8 +20,7 @@
                         return
                     }
                     let placemark = placemarks?.first
-                    let safePlacemarkData = placemark?.someProperty // data race errors under macOS 14 and 13
-                    continuation.resume(returning: safePlacemarkData)
+                    continuation.resume(returning: placemark)
                 }
             }
         }
