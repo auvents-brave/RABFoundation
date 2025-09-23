@@ -55,7 +55,7 @@ jobs:
         if: matrix.skip != true
         run: swift test
   build-xcodebuild-matrix:
-    name: 'Simulators ${{ matrix.name }} (6.1)'
+    name: '${{ matrix.name }} (6.1)'
     runs-on: macos-26-arm64
     timeout-minutes: 30
     strategy:
@@ -134,16 +134,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Swift SDK for wasm32-unknown-wasip1
-        run: >
-          curl -LO
-          https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
-
-          echo "YOUR_CORRECT_CHECKSUM_HERE 
-          swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip" |
-          sha256sum --check
-
-          swift sdk install
-          swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+        run: |
+          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+          
+          swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
       - name: Build Swift Package for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasip1
       - name: Test Swift Package (if tests are available)
