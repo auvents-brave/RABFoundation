@@ -39,10 +39,6 @@ jobs:
             runner: ubuntu-24.04
             skip: false
             relax_tests: false
-          - name: Ubuntu 22.04 LTS
-            runner: ubuntu-22.04
-            skip: false
-            relax_tests:  false
     steps:
       - uses: actions/checkout@v3
       - name: Skipped target warning
@@ -53,11 +49,14 @@ jobs:
         uses: swift-actions/setup-swift@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
+      - name: Build
+        if: matrix.skip != true
+        run: swift build
       - name: Run Tests
         if: matrix.skip != true
         run: |
           if [[ "${{ matrix.relax_tests }}" == "true" ]]; then
-            swift test -Xswiftc -Xfrontend -Xswiftc -enable-actor-data-race-checks=no
+            swift test -Xswiftc -enable-actor-data-race-checks=no
           else
             swift test
           fi
@@ -107,6 +106,7 @@ jobs:
           swift-version: '${{ env.SWIFT_VERSION }}'
       - name: Build
         if: matrix.skip != true
+        working-directory: ${{ github.workspace }}
         run: |
           xcodebuild
           -scheme rab-foundation
@@ -114,6 +114,7 @@ jobs:
           -destination '${{ matrix.destination }}'
       - name: Run Tests
         if: matrix.run_tests == true && matrix.skip != true
+        working-directory: ${{ github.workspace }}
         run: |
           xcodebuild
           -scheme rab-foundation
