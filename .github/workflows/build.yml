@@ -14,8 +14,8 @@ env:
   SWIFT_VERSION: '6.1'
 jobs:
   build-swift-matrix:
-    name: 'Native ${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
-    runs-on: '${{ matrix.runner }}'
+    name: 'Native ${{ matrix.name }} (6.1)'
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
@@ -55,11 +55,11 @@ jobs:
         if: matrix.skip != true
         run: swift test
   build-xcodebuild-matrix:
-    name: 'Simulators ${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
+    name: 'Simulators ${{ matrix.name }} (6.1)'
     runs-on: macos-26-arm64
+    timeout-minutes: 30
     strategy:
       fail-fast: false
-      timeout-minutes: 30
       matrix:
         include:
           - name: iOS Simulator
@@ -104,14 +104,14 @@ jobs:
         run: >
           xcodebuild
           -scheme rab-foundation
-          -sdk ${{ matrix.sdk || '' }}
+          -sdk ${{ matrix.sdk }}
           -destination '${{ matrix.destination }}'
       - name: Run Tests
         if: matrix.run_tests == true && matrix.skip != true
         run: >
           xcodebuild
           -scheme rab-foundation
-          -sdk ${{ matrix.sdk || '' }}
+          -sdk ${{ matrix.sdk }}
           -destination '${{ matrix.destination }}'
           -enableCodeCoverage YES
           -quiet
