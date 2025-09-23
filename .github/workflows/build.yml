@@ -1,153 +1,149 @@
 name: Build Swift Package on Multiple Platforms
-
 permissions:
   contents: read
-
-on:
+'on':
   push:
-    branches: [main, dev]
+    branches:
+      - main
+      - dev
   pull_request:
-    branches: [main, dev]
-
+    branches:
+      - main
+      - dev
 env:
-  SWIFT_VERSION: "6.1"
-
+  SWIFT_VERSION: '6.1'
 jobs:
   build-swift-matrix:
-    name: Build & Test - ${{ matrix.name }}
-    runs-on: ${{ matrix.runner }}
+    name: 'Native ${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
+    runs-on: '${{ matrix.runner }}'
     strategy:
       fail-fast: false
       matrix:
         include:
-          - name: macOS
-            runner: macos-latest
-            type: native
-            build: swift build --disable-sandbox
-            test: swift test --disable-sandbox
+          - name: macOS 26
+            runner: macos-26
             skip: false
-
-          - name: Linux
+          - name: macOS 15
+            runner: macos-15
+            skip: false
+          - name: macOS 14
+            runner: macos-14
+            skip: false
+          - name: macOS 13
+            runner: macos-13
+            skip: false
+          - name: Ubuntu 24.04 LTS
+            runner: ubuntu-24.04
+            skip: false
+          - name: Ubuntu 22.04 LTS
             runner: ubuntu-22.04
-            type: native
-            build: swift build --disable-sandbox
-            test: swift test --disable-sandbox
             skip: false
-
+    steps:
+      - uses: actions/checkout@v3
+      - name: Skipped target warning
+        if: matrix.skip == true
+        run: 'echo "::warning::''${{ matrix.name }}'' is ignored for the moment."'
+      - name: Setup Swift
+        if: matrix.skip != true
+        uses: swift-actions/setup-swift@v2.3.0
+        with:
+          swift-version: '${{ env.SWIFT_VERSION }}'
+      - name: Build
+        if: matrix.skip != true
+        run: swift build
+      - name: Run Tests
+        if: matrix.skip != true
+        run: swift test
+  build-xcodebuild-matrix:
+    name: 'Simulators ${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
+    runs-on: macos-26-arm64
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
           - name: iOS Simulator
-            runner: macos-latest
-            type: xcodebuild
             sdk: iphonesimulator
             destination: 'platform=iOS Simulator,name=iPhone 16e,OS=18.4'
             run_tests: true
             skip: false
-
           - name: tvOS Simulator
-            runner: macos-latest
-            type: xcodebuild
             sdk: appletvsimulator
-            destination: 'platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at 1080p),OS=18.4'
+            destination: >-
+              platform=tvOS Simulator,name=Apple TV 4K (3rd generation) (at
+              1080p),OS=18.4
             run_tests: true
             skip: false
-
           - name: watchOS Simulator (Build only)
-            runner: macos-latest
-            type: xcodebuild
             sdk: watchsimulator
             destination: 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm),OS=11.2'
-            run_tests: false  # No test support
+            run_tests: false
             skip: false
-
           - name: visionOS Simulator
-            runner: macos-latest
-            type: xcodebuild
             sdk: xrssimulator
             destination: 'platform=visionOS Simulator,name=Apple Vision Pro,OS=1.0'
             run_tests: false
-            skip: true
-
+            skip: false
           - name: macCatalyst
-            runner: macos-latest
-            type: xcodebuild
+            sdk: macosx
             destination: 'platform=macOS,variant=Mac Catalyst'
             run_tests: true
-            skip: true
-
+            skip: false
     steps:
       - uses: actions/checkout@v3
-
-# Swift Setup (non-Windows)
-      - name: Setup Swift
-        if: matrix.type != 'windows' && matrix.skip != true
-        uses: swift-actions/setup-swift@v2.3.0
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-
       - name: Skipped target warning
         if: matrix.skip == true
-        run: echo "::warning::'${{ matrix.name }}' is ignored for the moment."
-
-# Native build
-      - name: Build (native)
-        if: matrix.type == 'native' && matrix.skip != true
-        run: ${{ matrix.build }}
-
-      - name: Run Tests (native)
-        if: matrix.type == 'native' && matrix.skip != true
-        run: ${{ matrix.test }}
-
-# xcodebuild platforms
-      - name: Build with xcodebuild
-        if: matrix.type == 'xcodebuild' && matrix.skip != true
+        run: 'echo "::warning::''${{ matrix.name }}'' is ignored for the moment."'
+      - name: Setup Swift
+        if: matrix.skip != true
+        uses: swift-actions/setup-swift@v2.3.0
+        with:
+          swift-version: '${{ env.SWIFT_VERSION }}'
+      - name: Build
+        if: matrix.skip != true
         run: |
           xcodebuild \
             -scheme rab-foundation \
             -sdk ${{ matrix.sdk || '' }} \
-            -destination '${{ matrix.destination }}' \
-            clean build
-
-      - name: Run Tests with xcodebuild
-        if: matrix.type == 'xcodebuild' && matrix.run_tests == true && matrix.skip != true
+            -destination '${{ matrix.destination }}'
+      - name: Run Tests
+        if: matrix.run_tests == true && matrix.skip != true
         run: |
           xcodebuild \
             -scheme rab-foundation \
             -sdk ${{ matrix.sdk || '' }} \
-            -destination '${{ matrix.destination }}' \
-            clean test
-
+            -destination '${{ matrix.destination }}'
   build-windows:
-    name: Build & Test - Windows
+    name: Windows (6.2)
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Install Swift 6.2 on Windows
         uses: compnerd/gha-setup-swift@main
         with:
           branch: swift-6.2-release
           tag: 6.2-RELEASE
-
       - run: swift build
-
       - run: swift test
-
     build-wasm:
-      name: Build & Test for WebAssembly (SwiftWasm 6.2)
+      name: WebAssembly (6.2)
       runs-on: ubuntu-22.04
       steps:
         - uses: actions/checkout@v3
-
         - name: Install Swift SDK for wasm32-unknown-wasip1 (Swift 6.2)
-          run: |
-            curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
-            echo "YOUR_CORRECT_CHECKSUM_HERE  swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip" | sha256sum --check
-            swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
+          run: >
+            curl -LO
+            https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
 
+            echo "YOUR_CORRECT_CHECKSUM_HERE 
+            swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip" |
+            sha256sum --check
+
+            swift sdk install
+            swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
         - name: Build Swift Package for WebAssembly
           run: |
             swift build --swift-sdk wasm32-unknown-wasip1
-
         - name: Test Swift Package (if tests are available)
-          continue-on-error: true  # WASI test support may vary
+          continue-on-error: true
           run: |
             swift test --swift-sdk wasm32-unknown-wasip1
