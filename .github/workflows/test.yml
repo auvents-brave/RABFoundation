@@ -2,30 +2,31 @@ name: TEST
 permissions:
   contents: read
 on:
-  push:
-    branches:
-  pull_request:
-    branches:
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-env:
-  SWIFT_VERSION: '6.1'
 jobs:
 
   build-windows:
     name: Windows
     runs-on: windows-2025
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: >
+        run: |
           winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements --accept-source-agreements
 
       - name: Install Swift
-        run: >
+        run: |
           winget install --id Swift.Toolchain -e --accept-package-agreements --accept-source-agreements
+
+      - name: Add Swift to PATH
+        shell: pwsh
+        run: |
+          $env:Path += ";C:\Program Files\Swift\bin"
+          [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
 
       - name: Check Swift Version
         run: swift --version
@@ -34,10 +35,11 @@ jobs:
     name: Linux
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get -y install libcurl4-openssl-dev
+        run: |
+          sudo apt-get -y install libcurl4-openssl-dev
 
       - name: Install Swift
         run: |
@@ -47,6 +49,23 @@ jobs:
           # Get Swift binary path and persist it for future steps
           source "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
           echo "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/bin" >> $GITHUB_PATH
+
+      - name: Check Swift Version
+        run: swift --version
+
+  build-mac:
+    nalme: Mac
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Swift
+        run: >
+          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
+          installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
+          ~/.swiftly/bin/swiftly init --quiet-shell-followup
+          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
+          hash -r
 
       - name: Check Swift Version
         run: swift --version
