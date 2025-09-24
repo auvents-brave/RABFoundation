@@ -19,10 +19,13 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE/swift-6.2-RELEASE-windows10.exe `
             -OutFile swift-installer.exe
-          Start-Process -FilePath .\swift-installer.exe -ArgumentList "/quiet", "/verysilent", "/InstallAllUsers" -Wait
+          Start-Process -FilePath .\swift-installer.exe -ArgumentList "/quiet" -Wait
+          # , "/verysilent", "/InstallAllUsers"
           $installPath = "C:\Program Files\Swift\bin"
           $env:Path += ";$installPath"
           [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
+          #
+          swift --version
 
       - name: Check Swift Version
         run: swift --version
@@ -45,6 +48,7 @@ jobs:
           curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
           tar zxf swiftly-$(uname -m).tar.gz
           ./swiftly init --quiet-shell-followup
+          #
           # Get Swift binary path and persist it for future steps
           source "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
           echo "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/bin" >> $GITHUB_PATH
@@ -69,12 +73,9 @@ jobs:
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
           #
-          swift --version
           # Get Swift binary path and persist it for future steps
           echo "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/bin" >> $GITHUB_PATH
 
       - name: Check Swift Version
         run: swift --version
-
-      - name: aaa
-        run: xcodebuild
+  
