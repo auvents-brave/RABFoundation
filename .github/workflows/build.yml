@@ -181,6 +181,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - run: swift --version
+
+      - name: Install Swift Toolchain (from swift.org)
+        run: |
+          curl -LO https://download.swift.org/swift-6.2.0-release/ubuntu2204/swift-6.2.0-RELEASE-ubuntu22.04.tar.gz
+          mkdir -p $HOME/swift-6.2
+          tar -xzf swift-6.2.0-RELEASE-ubuntu22.04.tar.gz -C $HOME/swift-6.2 --strip-components=1
+          echo "$HOME/swift-6.2/usr/bin" >> $GITHUB_PATH
+
       - name: Install SwiftWasm toolchain 6.2
         run: |
           swift sdk install https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1-threads.artifactbundle.zip --checksum df8dee548a572f9325e997e1378f4dbab1dbfc986f92a35887b313e19007835d
