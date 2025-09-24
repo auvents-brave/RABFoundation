@@ -169,14 +169,12 @@ jobs:
 
       - name: Install SwiftWasm toolchain 6.2
         run: |
-          curl -LO https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-ubuntu22.04.tar.gz
-          mkdir -p $HOME/swiftwasm
-          tar -xzf swift-wasm-6.2-RELEASE-ubuntu22.04.tar.gz -C $HOME/swiftwasm --strip-components=1
+          swift sdk install https://github.com/swiftwasm/swift/releases/download/swift-wasm-6.2-RELEASE/swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1-threads.artifactbundle.zip --checksum df8dee548a572f9325e997e1378f4dbab1dbfc986f92a35887b313e19007835d
           echo "$HOME/swiftwasm/usr/bin" >> $GITHUB_PATH
 
       - name: Install WASI sysroot
         run: |
-          curl -LO https://github.com/swiftwasm/wasi-sdk/releases/download/wasi-sdk-20/swiftwasm-wasi-sdk-20.0.tar.gz
+          curl -LO https://github.com/swiftwasm/wasi-sdk/releases/download/20191022.1/wasi-sdk-4.39g3025a5f47c04-linux.tar.gz
           mkdir -p $HOME/wasi-sdk
           tar -xzf swiftwasm-wasi-sdk-20.0.tar.gz -C $HOME/wasi-sdk --strip-components=1
           echo "SWIFTFLAGS=-sdk $HOME/wasi-sdk/share/wasi-sysroot" >> $GITHUB_ENV
