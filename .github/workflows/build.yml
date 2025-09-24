@@ -161,7 +161,7 @@ jobs:
 
 
 
-  build-wasm2:
+  build-wasm22:
     name: WebAssembly (Swift 6.2)
     runs-on: ubuntu-24.04
     steps:
