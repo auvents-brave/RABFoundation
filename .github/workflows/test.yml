@@ -17,7 +17,7 @@ jobs:
       - name: Install Swift 6.2 silently
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE-windows10.exe `
+          Invoke-WebRequest -Uri https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE/swift-6.2-RELEASE-windows10.exe `
             -OutFile swift-installer.exe
           Start-Process -FilePath .\swift-installer.exe -ArgumentList "/quiet", "/verysilent", "/InstallAllUsers" -Wait
           $installPath = "C:\Program Files\Swift\bin"
