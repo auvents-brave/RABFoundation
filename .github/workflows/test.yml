@@ -10,29 +10,22 @@ jobs:
 
   build-windows:
     name: Build on Windows with Swift 6.2
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Swift 6.2
-        run: |
-          curl -L -o swift.zip https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE-windows10.zip
-
-      - name: Extract Swift
+      - name: Install Swift 6.2 silently
         shell: pwsh
         run: |
-          Expand-Archive -LiteralPath swift.zip -DestinationPath C:\Swift
-
-      - name: Add Swift to PATH
-        shell: pwsh
-        run: |
-          $env:Path += ";C:\Swift\bin"
+          Invoke-WebRequest -Uri https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE-windows10.exe `
+            -OutFile swift-installer.exe
+          Start-Process -FilePath .\swift-installer.exe -ArgumentList "/quiet", "/verysilent", "/InstallAllUsers" -Wait
+          $installPath = "C:\Program Files\Swift\bin"
+          $env:Path += ";$installPath"
           [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
 
       - name: Check Swift Version
-        shell: pwsh
         run: swift --version
-
 
   build-linux:
     name: Linux
@@ -75,6 +68,13 @@ jobs:
           ~/.swiftly/bin/swiftly init --quiet-shell-followup
           . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
           hash -r
+          #
+          swift --version
+          # Get Swift binary path and persist it for future steps
+          echo "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/bin" >> $GITHUB_PATH
 
       - name: Check Swift Version
         run: swift --version
+
+      - name: aaa
+        run: xcodebuild
