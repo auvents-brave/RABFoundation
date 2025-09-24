@@ -21,11 +21,11 @@ jobs:
 
       - name: Install dependencies
         run: >
-          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements
+          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements --accept-source-agreements
 
       - name: Install Swift
         run: >
-          winget install --id Swift.Toolchain -e --accept-package-agreements
+          winget install --id Swift.Toolchain -e --accept-package-agreements --accept-source-agreements
 
       - name: Check Swift Version
         run: swift --version
@@ -37,16 +37,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: |
-          sudo apt-get -y install libcurl4-openssl-dev
+        run: sudo apt-get -y install libcurl4-openssl-dev
 
       - name: Install Swift
         run: |
-          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
-          tar zxf swiftly-$(uname -m).tar.gz && \
-          ./swiftly init --quiet-shell-followup && \
-          . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
-          hash -r
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
+          tar zxf swiftly-$(uname -m).tar.gz
+          ./swiftly init --quiet-shell-followup
+          # Get Swift binary path and persist it for future steps
+          source "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
+          echo "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/bin" >> $GITHUB_PATH
 
       - name: Check Swift Version
         run: swift --version
