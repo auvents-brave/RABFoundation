@@ -1,0 +1,48 @@
+name: CI
+permissions:
+  contents: read
+on:
+  push:
+    branches:
+  pull_request:
+    branches:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  SWIFT_VERSION: '6.1'
+jobs:
+
+  build-windows:
+    name: Windows
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Windows platform dependencies
+        run >
+          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
+
+      - name: Install Swift
+          run >
+            winget install --id Swift.Toolchain -e
+
+      - name: Check Swift Version
+        run: swift --version
+
+  build-linux
+    name: Windows
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Swift
+        run |
+          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+          tar zxf swiftly-$(uname -m).tar.gz && \
+          ./swiftly init --quiet-shell-followup && \
+          . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+          hash -r
+
+      - name: Check Swift Version
+        run: swift --version
