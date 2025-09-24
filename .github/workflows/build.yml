@@ -41,6 +41,7 @@ jobs:
         uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
+      - name: Check Swift Version
         run: swift --version
 
       - name: Build
@@ -93,6 +94,7 @@ jobs:
         uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
+      - name: Check Swift Version
         run: swift --version
 
       - name: Build
@@ -124,9 +126,12 @@ jobs:
         with:
           branch: swift-6.2-release
           tag: 6.2-RELEASE
-      - run: swift --version
-      - run: swift build
-      - run: swift test
+      - name: Check Swift Version
+        run: swift --version
+      - name: Build
+        run: swift build
+      - name: Run Tests
+        run: swift test
   build-wasm1:
     name: WebAssembly (6.1)
     runs-on: ubuntu-22.04
