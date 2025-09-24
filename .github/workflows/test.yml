@@ -30,7 +30,7 @@ jobs:
       - name: Check Swift Version
         run: swift --version
 
-  build-linux
+  build-linux:
     name: Windows
     runs-on: ubuntu-24.04
     steps:
