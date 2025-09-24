@@ -2,7 +2,7 @@
     import Foundation
     import Testing
 
-    @testable import RabFoundation
+    @testable import AppleOnly
 
     @Suite("UserDefaults and iCloud Sync") struct UserDefaultsCloudSyncTests {
         @Test("Pushing Data to iCloud", arguments: [nil, "shared"])

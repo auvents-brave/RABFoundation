@@ -50,28 +50,36 @@ let package = Package(
         dependencies: [
           .product(name: "Logging", package: "swift-log"),
           .target(
-            name: "RabFoundationApple",
+            name: "AppleOnly",
             condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS, .watchOS, .visionOS])
           )
         ],
       ),
       .target(
-        name: "RabFoundationApple",
+        name: "AppleOnly",
         dependencies: [
           .product(name: "Logging", package: "swift-log"),
         ],
-        path: "Sources/Apple Only",
+        path: "Sources/AppleOnly",
       ),
 
       .testTarget(
-          name: "RabFoundationTests",
-          dependencies: [
-              "RabFoundation",
-              .product(name: "SwiftLogTesting", package: "swift-log-testing"),
-              ],
-          resources: [
-              .process("TestInfo.plist"),
-          ]
+        name: "RabFoundationTests",
+        dependencies: [
+          "RabFoundation",
+          .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+        ],
+        resources: [
+          .process("TestInfo.plist"),
+        ]
+      ),
+
+      .testTarget(
+        name: "AppleOnlyTests",
+        dependencies: [
+          "AppleOnly",
+          .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+        ],
       ),
     ],
     swiftLanguageModes: [ .v6 ],

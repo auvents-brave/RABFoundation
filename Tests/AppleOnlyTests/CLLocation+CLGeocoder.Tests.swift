@@ -5,7 +5,7 @@
         import GeoToolbox
     #endif
 
-    @testable import RabFoundation
+    @testable import AppleOnly
 
     @Test("Geocoder", arguments: [
         ("Strait of Bonifacio natural reserve, Bonifacio, 20169", CLLocation(latitude: 41.470, longitude: 9.268), "Bonifacio"),
