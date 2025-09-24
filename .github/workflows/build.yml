@@ -10,7 +10,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 env:
-  SWIFT_VERSION: '6.1'
+  SWIFT_VERSION: '6.2'
 jobs:
   build-swift-matrix:
     name: 'Native ${{ matrix.name }}'
