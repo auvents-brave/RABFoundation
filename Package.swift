@@ -21,7 +21,7 @@ var deps: [Package.Dependency] = [
     ),
 ]
 
-#if false // !os(macOS)
+#if false
     deps.append(
         .package(
             url: "https://github.com/apple/swift-docc-plugin",
@@ -45,23 +45,34 @@ let package = Package(
     dependencies: deps,
 
     targets: [
-        .target(
-            name: "RabFoundation",
-            dependencies: [
-                .product(name: "Logging", package: "swift-log"),
-            ],
-        ),
+      .target(
+        name: "RabFoundation",
+        dependencies: [
+          .product(name: "Logging", package: "swift-log"),
+          .target(
+            name: "RabFoundationApple",
+            condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS, .watchOS, .visionOS])
+          )
+        ],
+      ),
+      .target(
+        name: "RabFoundationApple",
+        dependencies: [
+          .product(name: "Logging", package: "swift-log"),
+        ],
+        path: "Sources/Apple Only",
+      ),
 
-        .testTarget(
-            name: "RabFoundationTests",
-            dependencies: [
-                "RabFoundation",
-                .product(name: "SwiftLogTesting", package: "swift-log-testing"),
-                ],
-            resources: [
-                .process("TestInfo.plist"),
-            ]
-        ),
+      .testTarget(
+          name: "RabFoundationTests",
+          dependencies: [
+              "RabFoundation",
+              .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+              ],
+          resources: [
+              .process("TestInfo.plist"),
+          ]
+      ),
     ],
     swiftLanguageModes: [ .v6 ],
 )
