@@ -16,7 +16,6 @@ jobs:
 
       - name: Install Swift 6.2 silently
         shell: pwsh
-
         run: |
         - name: Install Visual Studio (build tools only)
           shell: pwsh
