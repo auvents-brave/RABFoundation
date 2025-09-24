@@ -14,24 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check Swift Version
-        continue-on-error: true
-        run: swift --version
-
-   #   - name: Install dependencies
-        # run: |
-        #  winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements --accept-source-agreements
-
-      - name: Install Swift
+      - name: Job
         shell: pwsh
         run: |
-          winget install --id Swift.Toolchain -e --accept-package-agreements --accept-source-agreements
-          # Get Swift binary path and persist it for future steps
-          $env:Path += ";C:\Program Files\Swift\bin"
-          [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
-
-      - name: Check Swift Version
-        run: swift --version
+          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements --accept-source-agreements
+            winget install --id Swift.Toolchain -e --accept-package-agreements --accept-source-agreements
+            # Get Swift binary path and persist it for future steps
+            $env:Path += ";C:\Program Files\Swift\bin"
+            [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
+            swift --version
 
   build-linux:
     name: Linux
@@ -60,7 +51,7 @@ jobs:
 
   build-mac:
     name: Mac
-    runs-on: macos-26
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
