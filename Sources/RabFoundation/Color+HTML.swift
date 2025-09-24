@@ -133,8 +133,8 @@ extension Color {
 #endif
 
 fileprivate func toHTMLHex(red: Double, green: Double, blue: Double, includeHash: Bool = true) -> String {
-    let r = Int(round(red) * 255)
-    let g = Int(round(green) * 255)
-    let b = Int(round(blue) * 255)
+    let r = Int((red * 255).rounded())
+    let g = Int((green * 255).rounded())
+    let b = Int((blue * 255).rounded())
     return String(format: "%@%02X%02X%02X", includeHash ? "#" : "", r, g, b)
 }
