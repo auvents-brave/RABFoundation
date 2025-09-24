@@ -13,7 +13,7 @@ env:
   SWIFT_VERSION: '6.1'
 jobs:
   build-swift-matrix:
-    name: 'Native ${{ matrix.name }} (6.2)'
+    name: 'Native ${{ matrix.name }}'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -41,6 +41,7 @@ jobs:
         uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
+        run: swift --version
 
       - name: Build
         if: matrix.skip != true
@@ -49,7 +50,7 @@ jobs:
         if: matrix.skip != true
         run: swift test
   build-xcodebuild-matrix:
-    name: '${{ matrix.name }}  (6.2)'
+    name: '${{ matrix.name }}'
     runs-on: ${{ matrix.name == 'visionOS Simulator' && 'macos-latest-arm64' || 'macos-26' }}
     timeout-minutes: 30
     strategy:
@@ -58,7 +59,7 @@ jobs:
         include:
           - name: iOS Simulator
             sdk: iphonesimulator
-            destination: 'platform=iOS Simulator,name=iPhone SE (3rd generation),OS=18.5'
+            destination: 'platform=iOS Simulator,name=iPhone 16,OS=18.5'
             run_tests: true
             skip: false
           - name: tvOS Simulator
@@ -92,6 +93,7 @@ jobs:
         uses: swift-actions/setup-swift@next #@v2.3.0
         with:
           swift-version: '${{ env.SWIFT_VERSION }}'
+        run: swift --version
 
       - name: Build
         if: matrix.skip != true
@@ -122,6 +124,7 @@ jobs:
         with:
           branch: swift-6.2-release
           tag: 6.2-RELEASE
+      - run: swift --version
       - run: swift build
       - run: swift test
   build-wasm1:
@@ -136,7 +139,10 @@ jobs:
           unzip -q swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle.zip
 
           swift sdk install swift-wasm-6.1-RELEASE-wasm32-unknown-wasi.artifactbundle
-      - name: Build Swift Package for WebAssembly
+
+      - run: swift --version
+
+      - name: Build Swift package for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasi
       - name: Test Swift Package (if tests are available)
         continue-on-error: true
@@ -153,7 +159,10 @@ jobs:
           unzip -q swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle.zip
 
           swift sdk install swift-wasm-6.2-RELEASE-wasm32-unknown-wasip1.artifactbundle
-      - name: Build Swift Package for WebAssembly
+
+      - run: swift --version
+
+      - name: Build Swift package for WebAssembly
         run: swift build --swift-sdk wasm32-unknown-wasip1
       - name: Test Swift Package (if tests are available)
         continue-on-error: true
@@ -178,6 +187,8 @@ jobs:
           mkdir -p $HOME/wasi-sdk
           tar -xzf wasi-sdk-4.39g3025a5f47c04-linux.tar.gz -C $HOME/wasi-sdk --strip-components=1
           echo "SWIFTFLAGS=-sdk $HOME/wasi-sdk/share/wasi-sysroot" >> $GITHUB_ENV
+
+      - run: swift --version
 
       - name: Build Swift package for WebAssembly
         run: swift build --triple wasm32-unknown-wasip1 --build-path .build-wasm
