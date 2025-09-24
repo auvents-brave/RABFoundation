@@ -1,4 +1,4 @@
-name: CI
+name: TEST
 permissions:
   contents: read
 on:
@@ -21,23 +21,24 @@ jobs:
 
       - name: Install Windows platform dependencies
         run: >
-          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64"
+          winget install --id Microsoft.VisualStudio.2022.Community --exact --force --custom "--add Microsoft.VisualStudio.Component.Windows11SDK.22000 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.Tools.ARM64" --accept-package-agreements
 
       - name: Install Swift
         run: >
-          winget install --id Swift.Toolchain -e
+          winget install --id Swift.Toolchain -e --accept-package-agreements
 
       - name: Check Swift Version
         run: swift --version
 
   build-linux:
-    name: Windows
+    name: Linux
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
 
       - name: Install Swift
         run: |
+          apt-get -y install libcurl4-openssl-dev && \
           curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
           tar zxf swiftly-$(uname -m).tar.gz && \
           ./swiftly init --quiet-shell-followup && \
