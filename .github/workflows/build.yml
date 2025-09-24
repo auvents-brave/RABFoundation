@@ -13,7 +13,7 @@ env:
   SWIFT_VERSION: '6.2'
 jobs:
   build-swift-matrix:
-    name: 'Native ${{ matrix.name }} (${{ SWIFT_VERSION }}'
+    name: 'Native ${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -48,7 +48,7 @@ jobs:
         if: matrix.skip != true
         run: swift test
   build-xcodebuild-matrix:
-    name: '${{ matrix.name }} (${{ SWIFT_VERSION }}'
+    name: '${{ matrix.name }} (${{ env.SWIFT_VERSION }})'
     runs-on: ${{ matrix.name == 'visionOS Simulator' && 'macos-latest-arm64' || 'macos-15' }}
     timeout-minutes: 30
     strategy:
