@@ -14,23 +14,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download Swift toolchain
+      - name: Download Swift 6.2
         run: |
           curl -L -o swift.zip https://download.swift.org/swift-6.2-release/windows10/swift-6.2-RELEASE-windows10.zip
-          mkdir C:\Swift
-          tar -xf swift.zip -C C:\Swift --strip-components=1
+
+      - name: Extract Swift
+        shell: pwsh
+        run: |
+          Expand-Archive -LiteralPath swift.zip -DestinationPath C:\Swift
 
       - name: Add Swift to PATH
         shell: pwsh
         run: |
-          echo "##[add-path]C:\Swift\bin"
           $env:Path += ";C:\Swift\bin"
           [System.Environment]::SetEnvironmentVariable("PATH", $env:Path, [System.EnvironmentVariableTarget]::Process)
 
       - name: Check Swift Version
         shell: pwsh
-        run: |
-          swift --version
+        run: swift --version
+
 
   build-linux:
     name: Linux
