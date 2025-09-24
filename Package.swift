@@ -29,6 +29,49 @@ var deps: [Package.Dependency] = [
         ))
 #endif
 
+var targs: [Target] = [
+  .target(
+    name: "RabFoundation",
+    dependencies: [
+      .product(name: "Logging", package: "swift-log"),
+      .target(
+        name: "AppleOnly",
+        condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS, .watchOS, .visionOS])
+      )
+    ],
+  ),
+  .target(
+    name: "AppleOnly",
+    dependencies: [
+      .product(name: "Logging", package: "swift-log"),
+    ],
+    path: "Sources/AppleOnly",
+  ),
+
+  .testTarget(
+    name: "RabFoundationTests",
+    dependencies: [
+      "RabFoundation",
+      .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+    ],
+    resources: [
+      .process("TestInfo.plist"),
+    ]
+  ),
+]
+
+#if canImport(Darwin)
+targs.append(
+  .testTarget(
+    name: "AppleOnlyTests",
+    dependencies: [
+      "AppleOnly",
+      .product(name: "SwiftLogTesting", package: "swift-log-testing"),
+    ]
+  )
+)
+#endif
+
 let package = Package(
     name: "rab-foundation",
     platforms: [
@@ -44,43 +87,7 @@ let package = Package(
 
     dependencies: deps,
 
-    targets: [
-      .target(
-        name: "RabFoundation",
-        dependencies: [
-          .product(name: "Logging", package: "swift-log"),
-          .target(
-            name: "AppleOnly",
-            condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS, .watchOS, .visionOS])
-          )
-        ],
-      ),
-      .target(
-        name: "AppleOnly",
-        dependencies: [
-          .product(name: "Logging", package: "swift-log"),
-        ],
-        path: "Sources/AppleOnly",
-      ),
-
-      .testTarget(
-        name: "RabFoundationTests",
-        dependencies: [
-          "RabFoundation",
-          .product(name: "SwiftLogTesting", package: "swift-log-testing"),
-        ],
-        resources: [
-          .process("TestInfo.plist"),
-        ]
-      ),
-
-      .testTarget(
-        name: "AppleOnlyTests",
-        dependencies: [
-          "AppleOnly",
-          .product(name: "SwiftLogTesting", package: "swift-log-testing"),
-        ],
-      ),
-    ],
+    targets: targs,
+    
     swiftLanguageModes: [ .v6 ],
 )
