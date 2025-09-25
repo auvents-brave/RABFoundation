@@ -1,4 +1,4 @@
-name: TEST
+name: Build Windows
 permissions:
   contents: read
 on:
@@ -46,53 +46,3 @@ jobs:
 
       - name: Check Swift Version
         run: swift --version
-
-  build-linux:
-    name: Linux
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check Swift Version
-        run: swift --version
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get -y install libcurl4-openssl-dev
-
-      - name: Install Swiftly
-        run: |
-          curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
-          tar zxf swiftly-$(uname -m).tar.gz
-          ./swiftly init --quiet-shell-followup
-          #
-          # Get Swift binary path and persist it for future steps
-          source "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh"
-          echo "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/bin" >> $GITHUB_PATH
-
-      - name: Check Swift Version
-        run: swift --version
-
-  build-mac:
-    name: Mac
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check Swift Version
-        run: swift --version
-
-      - name: Install Swiftly
-        run: |
-          curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg
-          installer -pkg swiftly.pkg -target CurrentUserHomeDirectory
-          ~/.swiftly/bin/swiftly init --quiet-shell-followup
-          . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh"
-          hash -r
-          #
-          # Get Swift binary path and persist it for future steps
-          echo "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/bin" >> $GITHUB_PATH
-
-      - name: Check Swift Version
-        run: swift --version
-

@@ -13,7 +13,7 @@ extension Date {
         self.init()
 
         // Default ISO8601DateFormatter does not support fractional seconds
-        // .withFractionalSeconds expects fractional seconds onbly and will fail if not
+        // .withFractionalSeconds expects fractional seconds onbly and will fail if not.
         // Given 45.321 seconds, the nano component for the returned Date will be 320999145, not 321
         // → May it be usefull to round it?
         let formatter = ISO8601DateFormatter()
