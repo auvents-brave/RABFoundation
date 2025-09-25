@@ -75,7 +75,7 @@ targs.append(
 let package = Package(
     name: "rab-foundation",
     platforms: [
-        .macOS(.v12),
+        .macOS(.v14),
         .macCatalyst(.v14),
         .iOS(.v14),
         .tvOS(.v14),

@@ -48,8 +48,8 @@ extension Date {
     /// - Returns: The formatted date string.
     func Display(display: DisplayAs) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
         return Display(display: display, formatter: formatter)
     }
 }

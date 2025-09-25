@@ -9,7 +9,11 @@
     }
   ],
   "defaultOptions" : {
-    "language" : "en-GB",
+    "language" : "en",
+    "locationScenario" : {
+      "identifier" : "London, England",
+      "referenceType" : "built-in"
+    },
     "performanceAntipatternCheckerEnabled" : true,
     "region" : "GB",
     "testExecutionOrdering" : "random",
@@ -17,7 +21,13 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AppleOnlyTests",
+        "name" : "AppleOnlyTests"
+      }
+    },
+    {
       "target" : {
         "containerPath" : "container:",
         "identifier" : "RabFoundationTests",

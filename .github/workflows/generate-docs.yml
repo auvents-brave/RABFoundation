@@ -2,9 +2,9 @@ name: Generate and Deploy Swift Documentation
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
 
 permissions:
   contents: write
